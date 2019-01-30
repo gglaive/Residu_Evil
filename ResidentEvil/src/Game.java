@@ -22,22 +22,28 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, station_hall, sewers, lab, office;
+        Room outside, station_hall, station_1st_floor, sewers, lab, office;
         Random rand = new Random();
       
         // create the rooms
         outside = new Room("In the streets of Fock City", rand.nextInt(3));
         station_hall = new Room("in the main hall of the police station", rand.nextInt(3));
+        station_1st_floor = new Room("in the first floor of the police station", rand.nextInt(3));
         sewers = new Room("In the sewers", rand.nextInt(3));
         lab = new Room("in a computing lab", rand.nextInt(3));
         office = new Room("in the computing admin office", rand.nextInt(3));
         
         // initialise room exits
-        outside.setExits(null, station_hall, lab, sewers);
-        station_hall.setExits(null, null, null, outside);
-        sewers.setExits(null, outside, null, null);
-        lab.setExits(outside, office, null, null);
-        office.setExits(null, null, null, lab);
+        outside.setExit("east", station_hall);
+        outside.setExit("south", lab);
+        outside.setExit("west", sewers);
+        station_hall.setExit("west", outside);
+        station_hall.setExit("up", station_1st_floor);
+        station_1st_floor.setExit("down", station_hall);
+        sewers.setExit("east", outside);
+        lab.setExit("north", outside);
+        lab.setExit("east", office);
+        office.setExit("west", lab);
         
 
         currentRoom = outside;  // start game outside
@@ -73,7 +79,7 @@ public class Game
         System.out.println();
         System.out.println("Résidu.. Evil (because of copyright)");
         System.out.println("You are Leon, a rookie police officer in Fock City");
-        System.out.println("Due to a virus, the city is now infested with zombies");
+        System.out.println("Due to a virus, the city is now infested with yellow vests");
         System.out.println("Can you make it out alive?");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
@@ -103,6 +109,8 @@ public class Game
             wantToQuit = quit(command);
         else if (commandWord.equals("flee"))
         	flee(command);
+        else if (commandWord.equals("look"))
+        	look();
 
         return wantToQuit;
     }
@@ -117,10 +125,10 @@ public class Game
     private void printHelp() 
     {
         System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
+        System.out.println("around the streets.");
         System.out.println();
         System.out.println("Your command words are:");
-        System.out.println("   go quit help");
+        parser.showCommands();
     }
 
     /** 
@@ -138,19 +146,7 @@ public class Game
         String direction = command.getSecondWord();
 
         // Try to leave current room.
-        Room nextRoom = null;
-        if(direction.equals("north")) {
-            nextRoom = currentRoom.northExit;
-        }
-        if(direction.equals("east")) {
-            nextRoom = currentRoom.eastExit;
-        }
-        if(direction.equals("south")) {
-            nextRoom = currentRoom.southExit;
-        }
-        if(direction.equals("west")) {
-            nextRoom = currentRoom.westExit;
-        }
+        Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
             System.out.println("There is no door!");
@@ -163,17 +159,7 @@ public class Game
     
     private void printLocationInfo(){
         
-    	System.out.println("You are " + currentRoom.getDescription());
-            System.out.print("Exits: ");
-            if(currentRoom.northExit != null)
-                System.out.print("north ");
-            if(currentRoom.eastExit != null)
-                System.out.print("east ");
-            if(currentRoom.southExit != null)
-                System.out.print("south ");
-            if(currentRoom.westExit != null)
-                System.out.print("west ");
-            System.out.println();
+    	System.out.println(currentRoom.getLongDescription());
     }
     
     private void flee (Command command){
@@ -186,6 +172,10 @@ public class Game
     	
     	goRoom(command);
     	
+    }
+    
+    private void look(){
+    	System.out.println(currentRoom.getLongDescription());
     }
 
     /** 
