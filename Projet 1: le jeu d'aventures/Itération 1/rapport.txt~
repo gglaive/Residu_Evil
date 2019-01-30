@@ -1,0 +1,21 @@
+exercice 7.1
+1) Lance un jeu dans le terminal qui permet au joueur d'entrée des commandes pour réaliser des actions.
+2) Le jeu accepte go, help et quit.
+3) go : permet de se deplacer d'une piece a l'autre, en indiquant la direction.
+   help : laisse un message et liste l'ensemble des commandes possibles
+   quit : permet de quitter le jeu
+4) Il y a 5 pièces.
+5) voir le paint
+
+exercice 7.2
+Game : classe principale du jeu, elle permet de creer l'environnement du jeu, permet de le lancer, et d'executer les commandes. Elle fait communiquer l'ensemble des classes entre elles.
+
+Room : classe permettant d'instancier un object "Room" (piece) avec des sorties (4 directions).
+
+Command : crée un object commande.
+
+CommandWords : verifie la véracité des commandes.
+
+Parser : permet de transformer le texte entrées par l'utilisateur, en commandes valides.
+
+
