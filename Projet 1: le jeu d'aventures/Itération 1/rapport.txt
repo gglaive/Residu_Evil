@@ -9,11 +9,16 @@ exercice 7.1
 
 exercice 7.2
 Game : classe principale du jeu, elle permet de creer l'environnement du jeu, permet de le lancer, et d'executer les commandes. Elle fait communiquer l'ensemble des classes entre elles.
-
 Room : classe permettant d'instancier un object "Room" (piece) avec des sorties (4 directions).
-
 Command : crée un object commande.
-
 CommandWords : verifie la véracité des commandes.
-
 Parser : permet de transformer le texte entrées par l'utilisateur, en commandes valides.
+
+Exercice 7.10
+Tout d'abord, getExitStrings initialise une chaine de caractère nommée returnString (valeur qui sera retourner) avec comme valeur de départ "Exits:".
+Ensuite, getExitStrings initialise une second variable nommé keys qui est une collection de chaine de caractère (Set<String>) et qui est constitué de l'ensemble des clés de la collection exits (attribut de la classe Room, qui a un string associé un objet Room).
+Après, getExitStrings parcours l'ensemble des clés précédement récupérer et les concataine a la variable returnString (avec un espace entre chaque mot).
+Une fois le "foreach" fini, la variable returnString est retourné.
+
+Exercice 7.17
+Oui, nous devons modifier la classe Game pour ajouter la fonctionnalité dans une nouvelle méthode et en faire l'appel dans la methode processCommand.

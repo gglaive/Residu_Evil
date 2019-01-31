@@ -1,17 +1,20 @@
 import java.util.Random;
 
-
-public class Game 
-{
+/**
+ * Game est la classe principale du jeu, elle permet de creer
+ * l'environnement du jeu, permet de le lancer, et d'executer
+ * les commandes. Elle fait communiquer l'ensemble des classes
+ * entre elles.
+ */
+public class Game {
     private Parser parser;
     private Room currentRoom;
     private Player player;
-        
+
     /**
      * Create the game and initialise its internal map.
      */
-    public Game() 
-    {
+    public Game() {
         createRooms();
         parser = new Parser();
         player = new Player(3);
@@ -21,12 +24,26 @@ public class Game
     /**
      * Create all the rooms and link their exits together.
      */
+<<<<<<< HEAD
+    private void createRooms() {
+        Room outside, station_hall, station_1st_floor, sewers, lab, office;
+=======
     private void createRooms()
     {
         Room outside, station_hall, station_1st_floor, undergrounds, sewers, lab, office;
+>>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
         Random rand = new Random();
-      
+
         // create the rooms
+<<<<<<< HEAD
+        outside = new Room("In the streets of Fock City", rand.nextInt(3));
+        station_hall = new Room("in the main hall of the police station", rand.nextInt(3));
+        station_1st_floor = new Room("in the first floor of the police station", rand.nextInt(3));
+        sewers = new Room("In the sewers", rand.nextInt(3));
+        lab = new Room("in a computing lab", rand.nextInt(3));
+        office = new Room("in the computing admin office", rand.nextInt(3));
+
+=======
         outside = new Room("in the streets of Fock City. You can see the police station from here", rand.nextInt(2), "ammo");
         station_hall = new Room("in the main hall of the police station", rand.nextInt(2), null);
         station_1st_floor = new Room("in the first floor of the police station", rand.nextInt(2), null);
@@ -35,6 +52,7 @@ public class Game
         lab = new Room("in a computing lab", rand.nextInt(2), null);
         office = new Room("in the computing admin office", rand.nextInt(2), null);
         
+>>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
         // initialise room exits
         outside.setExit("east", station_hall);
         outside.setExit("south", lab);
@@ -54,25 +72,22 @@ public class Game
         lab.setExit("east", office);
         
         office.setExit("west", lab);
-        
 
         currentRoom = outside;  // start game outside
     }
-    
-    private void createZombies(){
-    	
-    }
+
+    //private void createZombies(){}
 
     /**
      *  Main play routine.  Loops until end of play.
      */
-    public void play() 
-    {            
+    public void play()
+    {
         printWelcome();
 
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
-                
+
         boolean finished = false;
         while (! finished) {
             Command command = parser.getCommand();
@@ -84,8 +99,7 @@ public class Game
     /**
      * Print out the opening message for the player.
      */
-    private void printWelcome()
-    {
+    private void printWelcome() {
         System.out.println();
         System.out.println("Résidu.. Evil (because of copyright)");
         System.out.println("You are Leon, a rookie police officer in Fock City");
@@ -101,8 +115,7 @@ public class Game
      * @param command The command to be processed.
      * @return true If the command ends the game, false otherwise.
      */
-    private boolean processCommand(Command command) 
-    {
+    private boolean processCommand(Command command) {
         boolean wantToQuit = false;
 
         if(command.isUnknown()) {
@@ -118,24 +131,28 @@ public class Game
         else if (commandWord.equals("quit"))
             wantToQuit = quit(command);
         else if (commandWord.equals("flee"))
-        	flee(command);
+	    flee(command);
         else if (commandWord.equals("look"))
+<<<<<<< HEAD
+	    look();
+	
+=======
         	look();
         else if (commandWord.equals("pickup"))
         	pickup();
 
+>>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
         return wantToQuit;
     }
-
+    
     // implementations of user commands:
-
+    
     /**
      * Print out some help information.
-     * Here we print some stupid, cryptic message and a list of the 
+     * Here we print some stupid, cryptic message and a list of the
      * command words.
      */
-    private void printHelp() 
-    {
+    private void printHelp() {
         System.out.println("You are lost. You are alone. You wander");
         System.out.println("around the streets.");
         System.out.println();
@@ -143,49 +160,61 @@ public class Game
         parser.showCommands();
     }
 
-    /** 
+    /**
      * Try to go to one direction. If there is an exit, enter
      * the new room, otherwise print an error message.
      */
-    private void goRoom(Command command) 
-    {
+    private void goRoom(Command command) {
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
             System.out.println("Go where?");
             return;
         }
-
+	
         String direction = command.getSecondWord();
-
+	
         // Try to leave current room.
         Room nextRoom = currentRoom.getExit(direction);
-
+	
         if (nextRoom == null) {
             System.out.println("There is no door!");
-        }
-        else {
+        } else {
             currentRoom = nextRoom;
             printLocationInfo();
         }
     }
     
+    /**
+     * Permet d'afficher à l'utilisateur dans 
+     * quelle pièce il est actuellement.
+     */
     private void printLocationInfo(){
-        
     	System.out.println(currentRoom.getLongDescription());
     }
-    
+
+    /**
+     * flee est une commande qui permet au joueur de fuir
+     */
     private void flee (Command command){
-    	
     	Random rand = new Random();
-    	if(rand.nextInt(10) >= 5){
+    	if(rand.nextInt(10) >= 5) {
     		player.isAttacked();
+<<<<<<< HEAD
+    	}
+    	System.out.println(player.health);
+
+=======
     	};
     	System.out.println("Your health: " + player.getHealth());
     	
+>>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
     	goRoom(command);
-    	
     }
-    
+
+    /**
+     * look est une fonction qui permet au joueur d'avoir une
+     * description sur la piece où il se trouve actuellement.
+     */
     private void look(){
     	System.out.println(currentRoom.getLongDescription());
     }
@@ -207,12 +236,12 @@ public class Game
     	}
     }
 
-    /** 
+    /**
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.
      * @return true, if this command quits the game, false otherwise.
      */
-    private boolean quit(Command command) 
+    private boolean quit(Command command)
     {
         if(command.hasSecondWord()) {
             System.out.println("Quit what?");

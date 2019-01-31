@@ -1,9 +1,10 @@
-
-public class Command
-{
+/**
+ * La classe Command permet de crée un object commande.
+ */
+public class Command {
     private String commandWord;
     private String secondWord;
-
+    
     /**
      * Create a command object. First and second word must be supplied, but
      * either one (or both) can be null.
