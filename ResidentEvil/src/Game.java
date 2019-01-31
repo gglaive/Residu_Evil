@@ -15,6 +15,7 @@ public class Game
         createRooms();
         parser = new Parser();
         player = new Player(3);
+        
     }
 
     /**
@@ -22,27 +23,36 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, station_hall, station_1st_floor, sewers, lab, office;
+        Room outside, station_hall, station_1st_floor, undergrounds, sewers, lab, office;
         Random rand = new Random();
       
         // create the rooms
-        outside = new Room("In the streets of Fock City", rand.nextInt(3));
-        station_hall = new Room("in the main hall of the police station", rand.nextInt(3));
-        station_1st_floor = new Room("in the first floor of the police station", rand.nextInt(3));
-        sewers = new Room("In the sewers", rand.nextInt(3));
-        lab = new Room("in a computing lab", rand.nextInt(3));
-        office = new Room("in the computing admin office", rand.nextInt(3));
+        outside = new Room("in the streets of Fock City. You can see the police station from here", rand.nextInt(2), "ammo");
+        station_hall = new Room("in the main hall of the police station", rand.nextInt(2), null);
+        station_1st_floor = new Room("in the first floor of the police station", rand.nextInt(2), null);
+        undergrounds = new Room("in the undergrounds of the station", rand.nextInt(2), null);
+        sewers = new Room("in the sewers", rand.nextInt(2), null);
+        lab = new Room("in a computing lab", rand.nextInt(2), null);
+        office = new Room("in the computing admin office", rand.nextInt(2), null);
         
         // initialise room exits
         outside.setExit("east", station_hall);
         outside.setExit("south", lab);
         outside.setExit("west", sewers);
+        
         station_hall.setExit("west", outside);
         station_hall.setExit("up", station_1st_floor);
+        station_hall.setExit("down", undergrounds);
+        
         station_1st_floor.setExit("down", station_hall);
+        
+        undergrounds.setExit("up", station_hall);
+        
         sewers.setExit("east", outside);
+        
         lab.setExit("north", outside);
         lab.setExit("east", office);
+        
         office.setExit("west", lab);
         
 
@@ -111,6 +121,8 @@ public class Game
         	flee(command);
         else if (commandWord.equals("look"))
         	look();
+        else if (commandWord.equals("pickup"))
+        	pickup();
 
         return wantToQuit;
     }
@@ -168,7 +180,7 @@ public class Game
     	if(rand.nextInt(10) >= 5){
     		player.isAttacked();
     	};
-    	System.out.println(player.health);
+    	System.out.println("Your health: " + player.getHealth());
     	
     	goRoom(command);
     	
@@ -176,6 +188,23 @@ public class Game
     
     private void look(){
     	System.out.println(currentRoom.getLongDescription());
+    }
+    
+    private void pickup(){
+    	if(currentRoom.getItem() == null)
+    		System.out.println("There is no item here !");
+    	else if(currentRoom.getItem() == "ammo"){
+    		player.getGun().setAmmo(player.getGun().getAmmo() + 15);
+    		System.out.println("You picked up " + currentRoom.getItem());
+    		currentRoom.setItem(null);
+    		System.out.println("You have " + player.getGun().getAmmo() + " ammo");
+    	}
+    	else{
+    		player.getItems().add(currentRoom.getItem());
+        	System.out.println("You picked up " + currentRoom.getItem());
+        	currentRoom.setItem(null);
+        	System.out.println("Your items: " + player.getItems());
+    	}
     }
 
     /** 

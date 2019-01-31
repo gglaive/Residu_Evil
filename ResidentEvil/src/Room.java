@@ -3,9 +3,10 @@ import java.util.*;
 public class Room 
 {
     private String description;
-    public int number;
-    public ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+    private int number;
+    private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
     private HashMap<String, Room> exits;
+    private String item;
 
     /**
      * Create a room described "description". Initially, it has
@@ -13,16 +14,53 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description, int random) 
+    public Room(String description, int random, String item) 
     {
         this.description = description;
         exits = new	HashMap<String, Room>();
         if(random>0)
         	this.description = this.description.concat(", " + random + " yellow jackets");
         this.number = random;
+        this.item = item;
     }
     
-    public Room getExit(String direction){
+    public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public ArrayList<Zombie> getZombies() {
+		return zombies;
+	}
+
+	public void setZombies(ArrayList<Zombie> zombies) {
+		this.zombies = zombies;
+	}
+
+	public HashMap<String, Room> getExits() {
+		return exits;
+	}
+
+	public void setExits(HashMap<String, Room> exits) {
+		this.exits = exits;
+	}
+
+	public String getItem() {
+		return item;
+	}
+
+	public void setItem(String item) {
+		this.item = item;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Room getExit(String direction){
     	
     	return exits.get(direction);
     }
