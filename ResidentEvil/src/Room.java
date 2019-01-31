@@ -1,5 +1,10 @@
 import java.util.*;
 
+/**
+ * Room est une classe permettant d'instancier un object "Room" (piece)
+ * avec des sorties.
+ */
+
 public class Room 
 {
     private String description;
@@ -9,9 +14,7 @@ public class Room
     private String item;
 
     /**
-     * Create a room described "description". Initially, it has
-     * no exits. "description" is something like "a kitchen" or
-     * "an open court yard".
+     * Crée une pièce avec une description.
      * @param description The room's description.
      */
     public Room(String description, int random, String item) 
@@ -23,6 +26,17 @@ public class Room
         this.number = random;
         this.item = item;
     }
+<<<<<<< HEAD
+
+    /**
+     * getExit permet de retourner un objet room
+     * en fonction d'une direction.
+     * @param {String} direction
+     * @return {Room} - retourne la sortie dans la direction indiqué
+     */
+    public Room getExit(String direction){
+	return exits.get(direction);
+=======
     
     public int getNumber() {
 		return number;
@@ -63,8 +77,14 @@ public class Room
 	public Room getExit(String direction){
     	
     	return exits.get(direction);
+>>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
     }
-    
+
+    /**
+     * getExitString permet de retourner en chaine de caractère
+     * l'ensemble des sorties de la piece courante.
+     * @return {String} - indique l'ensemble des sorties.
+     */
     public String getExitString(){
     	String exit = "Exits: ";
     	Set<String> keys = exits.keySet();
@@ -74,25 +94,41 @@ public class Room
     	return exit;
     }
 
+    /**
+     * Permet de fixer une sortie.
+     * @method setExit
+     * @param {String} direction - clé
+     * @param {Room} neighbor - valeur
+     */
     public void setExit(String direction, Room neighbor) {
-    	
-    	exits.put(direction, neighbor);
+	exits.put(direction, neighbor);
     }
 
+    /*
     public void setZombie(){
     	for(int i=0; i<number; i++){
     		Zombie zombie = new Zombie((int)Math.random() * (20));
     		zombies.add(zombie);
     	}
     }
+    */
 
-    public String getDescription()
-    {
+    /**
+     * Permet de récupérer la description courante.
+     * @method getDescription
+     * @return {String} - description de l'objet courant
+     */
+    public String getDescription(){
         return description;
     }
-   
+
+    /**
+     * Permet de récupérer la description courante,
+     * ainsi que la liste des sorties. 
+     * @method getLongDescription
+     * @return {String} - description de l'objet courant et les sorties.
+     */   
     public String getLongDescription(){
     	return "You are " + description + ".\n" + getExitString();
     }
-
 }

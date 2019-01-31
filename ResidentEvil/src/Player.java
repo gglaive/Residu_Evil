@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+public class Player {
+    public int health;
+    public boolean isAlive;
+    
+    public Player(int health) {
+=======
 import java.util.ArrayList;
 
 
@@ -50,20 +57,26 @@ public class Player
      */
     public Player(int health) 
     {
+>>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
         this.health = health;
         this.isAlive = true;
         this.gun = new Weapon("gun", 1, 15);
     }
     
+<<<<<<< HEAD
+    public int getHeath() {
+        return health;
+    }
+=======
+>>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
     
-    public void isAttacked(){
+    public void isAttacked() {
     	health = health -1;
     	if (health==0)
-    		isAlive = false;
+	    isAlive = false;
     }
     
-    public void isHealed(){
-    	health = health +1;
+    public void isHealed() {
+    	health = health + 1;
     }
-
 }
