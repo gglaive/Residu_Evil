@@ -5,8 +5,7 @@ import java.util.*;
  * avec des sorties.
  */
 
-public class Room 
-{
+public class Room {
     private String description;
     private int number;
     private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
@@ -17,16 +16,50 @@ public class Room
      * Crée une pièce avec une description.
      * @param description The room's description.
      */
-    public Room(String description, int random, String item) 
-    {
+    public Room(String description, int random, String item) {
         this.description = description;
-        exits = new	HashMap<String, Room>();
+        exits = new HashMap<String, Room>();
         if(random>0)
         	this.description = this.description.concat(", " + random + " yellow jackets");
         this.number = random;
         this.item = item;
     }
-<<<<<<< HEAD
+    
+    public int getNumber() {
+	return number;
+    }
+    
+    public void setNumber(int number) {
+	this.number = number;
+    }
+    
+    public ArrayList<Zombie> getZombies() {
+	return zombies;
+    }
+    
+    public void setZombies(ArrayList<Zombie> zombies) {
+	this.zombies = zombies;
+    }
+    
+    public HashMap<String, Room> getExits() {
+	return exits;
+    }
+    
+    public void setExits(HashMap<String, Room> exits) {
+	this.exits = exits;
+    }
+    
+    public String getItem() {
+	return item;
+    }
+    
+    public void setItem(String item) {
+	this.item = item;
+    }
+
+    public void setDescription(String description) {
+	this.description = description;
+    }
 
     /**
      * getExit permet de retourner un objet room
@@ -36,48 +69,6 @@ public class Room
      */
     public Room getExit(String direction){
 	return exits.get(direction);
-=======
-    
-    public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
-	}
-
-	public ArrayList<Zombie> getZombies() {
-		return zombies;
-	}
-
-	public void setZombies(ArrayList<Zombie> zombies) {
-		this.zombies = zombies;
-	}
-
-	public HashMap<String, Room> getExits() {
-		return exits;
-	}
-
-	public void setExits(HashMap<String, Room> exits) {
-		this.exits = exits;
-	}
-
-	public String getItem() {
-		return item;
-	}
-
-	public void setItem(String item) {
-		this.item = item;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Room getExit(String direction){
-    	
-    	return exits.get(direction);
->>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
     }
 
     /**
@@ -103,15 +94,6 @@ public class Room
     public void setExit(String direction, Room neighbor) {
 	exits.put(direction, neighbor);
     }
-
-    /*
-    public void setZombie(){
-    	for(int i=0; i<number; i++){
-    		Zombie zombie = new Zombie((int)Math.random() * (20));
-    		zombies.add(zombie);
-    	}
-    }
-    */
 
     /**
      * Permet de récupérer la description courante.

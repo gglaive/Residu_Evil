@@ -24,26 +24,11 @@ public class Game {
     /**
      * Create all the rooms and link their exits together.
      */
-<<<<<<< HEAD
     private void createRooms() {
-        Room outside, station_hall, station_1st_floor, sewers, lab, office;
-=======
-    private void createRooms()
-    {
         Room outside, station_hall, station_1st_floor, undergrounds, sewers, lab, office;
->>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
         Random rand = new Random();
 
         // create the rooms
-<<<<<<< HEAD
-        outside = new Room("In the streets of Fock City", rand.nextInt(3));
-        station_hall = new Room("in the main hall of the police station", rand.nextInt(3));
-        station_1st_floor = new Room("in the first floor of the police station", rand.nextInt(3));
-        sewers = new Room("In the sewers", rand.nextInt(3));
-        lab = new Room("in a computing lab", rand.nextInt(3));
-        office = new Room("in the computing admin office", rand.nextInt(3));
-
-=======
         outside = new Room("in the streets of Fock City. You can see the police station from here", rand.nextInt(2), "ammo");
         station_hall = new Room("in the main hall of the police station", rand.nextInt(2), null);
         station_1st_floor = new Room("in the first floor of the police station", rand.nextInt(2), null);
@@ -51,8 +36,7 @@ public class Game {
         sewers = new Room("in the sewers", rand.nextInt(2), null);
         lab = new Room("in a computing lab", rand.nextInt(2), null);
         office = new Room("in the computing admin office", rand.nextInt(2), null);
-        
->>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
+
         // initialise room exits
         outside.setExit("east", station_hall);
         outside.setExit("south", lab);
@@ -81,8 +65,7 @@ public class Game {
     /**
      *  Main play routine.  Loops until end of play.
      */
-    public void play()
-    {
+    public void play() {
         printWelcome();
 
         // Enter the main command loop.  Here we repeatedly read commands and
@@ -133,15 +116,9 @@ public class Game {
         else if (commandWord.equals("flee"))
 	    flee(command);
         else if (commandWord.equals("look"))
-<<<<<<< HEAD
 	    look();
-	
-=======
-        	look();
         else if (commandWord.equals("pickup"))
-        	pickup();
-
->>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
+	    pickup();
         return wantToQuit;
     }
     
@@ -199,15 +176,8 @@ public class Game {
     	Random rand = new Random();
     	if(rand.nextInt(10) >= 5) {
     		player.isAttacked();
-<<<<<<< HEAD
     	}
-    	System.out.println(player.health);
-
-=======
-    	};
     	System.out.println("Your health: " + player.getHealth());
-    	
->>>>>>> 7e8bc780d8630086f84b3f8c7f37bf3bd530764a
     	goRoom(command);
     }
 
