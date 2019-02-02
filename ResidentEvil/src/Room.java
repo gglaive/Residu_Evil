@@ -7,58 +7,52 @@ import java.util.*;
 
 public class Room {
     private String description;
-    private int number;
     private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
     private HashMap<String, Room> exits;
-    private String item;
+    private Item item;
 
     /**
      * Crée une pièce avec une description.
      * @param description The room's description.
      */
-    public Room(String description, int random, String item) {
+    public Room(String description, int random, Item item) {
         this.description = description;
         exits = new HashMap<String, Room>();
-        if(random>0)
-        	this.description = this.description.concat(", " + random + " yellow jackets");
-        this.number = random;
+        if(random>0) {
+            for (int i=0; i<random; i++) {
+            	Zombie zombie = new Zombie(2);
+            	zombies.add(zombie);
+            }
+        }
         this.item = item;
     }
     
-    public int getNumber() {
-	return number;
-    }
-    
-    public void setNumber(int number) {
-	this.number = number;
-    }
-    
     public ArrayList<Zombie> getZombies() {
-	return zombies;
+    	return zombies;
     }
     
     public void setZombies(ArrayList<Zombie> zombies) {
-	this.zombies = zombies;
+    	this.zombies = zombies;
     }
     
     public HashMap<String, Room> getExits() {
-	return exits;
+    	return exits;
     }
     
     public void setExits(HashMap<String, Room> exits) {
-	this.exits = exits;
-    }
-    
-    public String getItem() {
-	return item;
-    }
-    
-    public void setItem(String item) {
-	this.item = item;
+    	this.exits = exits;
     }
 
-    public void setDescription(String description) {
-	this.description = description;
+    public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
+	public void setDescription(String description) {
+    	this.description = description;
     }
 
     /**
@@ -68,7 +62,7 @@ public class Room {
      * @return {Room} - retourne la sortie dans la direction indiqué
      */
     public Room getExit(String direction){
-	return exits.get(direction);
+    	return exits.get(direction);
     }
 
     /**
@@ -104,13 +98,22 @@ public class Room {
         return description;
     }
 
-    /**
+
+	/**
      * Permet de récupérer la description courante,
      * ainsi que la liste des sorties. 
      * @method getLongDescription
      * @return {String} - description de l'objet courant et les sorties.
      */   
-    public String getLongDescription(){
-    	return "You are " + description + ".\n" + getExitString();
+    public void getLongDescription(){
+    	System.out.println("You are " + getDescription());
+    	if(zombies.size() > 0) {
+    		System.out.println(zombies.size() + " yellow jackets");
+    	}
+    	if(item != null) {
+    		System.out.println("There is an item here ! *" + getItem().getName() + "*");
+    	}
+    	System.out.println(getExitString());
+    	return;
     }
 }

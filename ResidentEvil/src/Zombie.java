@@ -1,11 +1,16 @@
 public class Zombie {
-    public int health;
+    private int health;
 
-    public Zombie(int heath){
+    public Zombie(int health){
         this.health = health;
     }
     
-    public int getHeath(){
-        return health;
-    }
+    public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
 }
