@@ -28,38 +28,115 @@ public class Game {
      * Create all the rooms and link their exits together.
      */
     private void createRooms() {
-        Room outside, station_hall, station_1st_floor, undergrounds, sewers, lab, office;
+        Room outside, station_hall, station_1st_floor, west_wing, armory, west_stairs, black_room, west_corridor, squad_office, reserve, library, east_wing, bathroom, police_office, back_garden, east_corridor, chief_office, break_room, roof, backyard_room, undergrounds;
         Random rand = new Random();
         
 
         // create the rooms
-        outside = new Room("in the streets of Fock City. You can see the police station from here", rand.nextInt(3), herb);
-        station_hall = new Room("in the main hall of the police station", rand.nextInt(3), herb);
-        station_1st_floor = new Room("in the first floor of the police station", rand.nextInt(3), null);
+        // start
+        outside = new Room("in the streets of Fock City. You can see the police station from here. Zombies are all around you so you should hurry", rand.nextInt(10), herb);
+        
+        // Police Station rooms
+        // Center
+        station_hall = new Room("in the main hall of the police station. This place is huge. You remember there's a secret passage under the big statue here, but you need two medaillons first ..", 0, herb);
+        station_1st_floor = new Room("above the police station hall", rand.nextInt(3), null);
+        
+        //West side
+        west_wing = new Room("in the west wing. The corridor is tight and only the moonlight brighten a bit this place..", rand.nextInt(3), null);
+        armory = new Room("in the armory. There's many weapons exposed here, but you need a keycard first", rand.nextInt(3), ammo);
+        west_stairs = new Room("in the front of the stairs. You can see a small room hide behind those", rand.nextInt(3), null);
+        black_room = new Room("in what looks like a black room. It looks safe but there's not much to see here", 0, herb);
+        west_corridor = new Room("in the corridor upstairs. A fading light is somehow lightening it", rand.nextInt(3), null);
+        squad_office = new Room("in the office of the squad unity. There should be something useful", 0, ammo);
+        reserve = new Room("in the reserve. It's really dark in here", rand.nextInt(3), null);
+        library = new Room("in the library. It's quite big and almost too bright, but you see one of the medals thanks to that!", rand.nextInt(3), medal);
+        
+        //East side
+        east_wing = new Room("in the east wing. The path looks long, and the weak moonlight shows you blood along the way", rand.nextInt(3), null);
+        bathroom = new Room("in the bathroom. The water is flowing from one of the sink", rand.nextInt(3), herb);
+        police_office = new Room("in the main police office. The desks are messy", rand.nextInt(3), ammo);
+        back_garden = new Room("in a small garden, which serves as a fire exit. There's an access to upstairs", 0, null);
+        east_corridor = new Room("in the corridor upstairs. It's the cleanest room you've seen yet", rand.nextInt(3), null);
+        chief_office = new Room("in the office of the police chief. It's quite small but it has to contain some ammo. Looks like you can unlock to access to the main hall from here", 0, ammo);
+        break_room = new Room("in the break room. Not much useful things here but it's a safe place", 0, herb);
+        roof = new Room("in the roof of the station. It's pouring rain here. There's a small building downstairs", rand.nextInt(3), null);
+        backyard_room = new Room("in the backyard room. There might be something useful ..", rand.nextInt(3), medal);
+        
+        //others
         undergrounds = new Room("in the undergrounds of the station", rand.nextInt(3), null);
-        sewers = new Room("in the sewers", rand.nextInt(3), null);
-        lab = new Room("in a computing lab", rand.nextInt(3), ammo);
-        office = new Room("in the computing admin office", rand.nextInt(3), ammo);
 
         // initialise room exits
-        outside.setExit("east", station_hall);
-        outside.setExit("south", lab);
-        outside.setExit("west", sewers);
+        // start
+        outside.setExit("north", station_hall);
         
-        station_hall.setExit("west", outside);
+        // Police station
+        // Center
+        station_hall.setExit("south", outside);
+        station_hall.setExit("west", west_wing);
+        station_hall.setExit("east", east_wing);
         station_hall.setExit("up", station_1st_floor);
         station_hall.setExit("down", undergrounds);
         
+        station_1st_floor.setExit("west", library);
+        station_1st_floor.setExit("east", chief_office);
         station_1st_floor.setExit("down", station_hall);
         
+        // West side
+        west_wing.setExit("east", station_hall);
+        west_wing.setExit("west", armory);
+        west_wing.setExit("north", west_stairs);
+        
+        armory.setExit("east", west_wing);
+        
+        west_stairs.setExit("south", west_wing);
+        west_stairs.setExit("east", black_room);
+        west_stairs.setExit("up", west_corridor);
+        
+        black_room.setExit("west", west_stairs);
+        
+        west_corridor.setExit("down", west_stairs);
+        west_corridor.setExit("west", squad_office);
+        west_corridor.setExit("east", reserve);
+        
+        squad_office.setExit("east", west_corridor);
+        
+        reserve.setExit("west", west_corridor);
+        reserve.setExit("south", library);
+        
+        library.setExit("north", reserve);
+        library.setExit("east", station_1st_floor);
+        
+        // East Side
+        
+        east_wing.setExit("east", back_garden);
+        east_wing.setExit("west", station_hall);
+        east_wing.setExit("north", bathroom);
+        east_wing.setExit("south", police_office);
+        
+        bathroom.setExit("south", east_wing);
+        
+        police_office.setExit("north", east_wing);
+        
+        back_garden.setExit("west", east_wing);
+        back_garden.setExit("up", east_corridor);
+    
+        east_corridor.setExit("down", back_garden);
+        east_corridor.setExit("west", chief_office);
+        east_corridor.setExit("east", roof);
+        east_corridor.setExit("north", break_room);
+        
+        break_room.setExit("south", east_corridor);
+        
+        chief_office.setExit("east", west_corridor);
+        chief_office.setExit("west", station_1st_floor);
+        
+        roof.setExit("west", east_corridor);
+        roof.setExit("down", backyard_room);
+        
+        backyard_room.setExit("up", roof);
+        
+        //others
         undergrounds.setExit("up", station_hall);
-        
-        sewers.setExit("east", outside);
-        
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
-        
-        office.setExit("west", lab);
 
         currentRoom = outside;  // start game outside
     }
@@ -89,8 +166,10 @@ public class Game {
     private void printWelcome() {
         System.out.println();
         System.out.println("Residu.. Evil (because of copyright)");
-        System.out.println("You are Leon, a rookie police officer in Fock City");
+        System.out.println("You are Leonn, a rookie police officer in Fock City");
         System.out.println("Due to a virus, the city is now infested with yellow vests");
+        System.out.println("It's night-time and zombies are moving fast. You have to find a way out of this city");
+        System.out.println("Your only solution now is to take refuge in the police_station");
         System.out.println("Can you make it out alive?");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
@@ -271,7 +350,7 @@ public class Game {
     	player.getGun().setAmmo(player.getGun().getAmmo() -1);
     	
     	System.out.println("Ammo left in gun: " + player.getGun().getAmmo());
-    	System.out.println("Zombie " + zombie_number + " has " + zombie.getHealth() + " left !");
+    	System.out.println("Zombie " + zombie_number + " has " + zombie.getHealth() + " hp left !");
     	
     	if(zombie.getHealth() == 0) {
     		System.out.println("Zombie " + zombie_number + " is dead !");
