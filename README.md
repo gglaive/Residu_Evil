@@ -13,13 +13,13 @@ TODO
 - fonction use
 	- verification de la location avant utilisation (medaillon qui ne s'utilisent que dans "station_hall")
 
-- modifier les textes
+- modifier le contenu de help
 
 - ajouter un etat de fin de partie (cas de victoire/ cas de mort)
 	- game over quand pv = 0
 	- victoire quand salle actuelle = la salle accessible avec les deux medaillons
 
-- ajouter et modifier les pieces selon la map décidé
+- ajouter une photo pour chaque pièce
 
 - ajouter une attaque pour les zombies
 	- inflige x degats apres x "tours" (actions du joueur)
