@@ -1,33 +1,8 @@
 TODO
 
-- Gestion des shortcuts (raccourcis) (via une fonction unlock?)
-	- accès bloqué au début
-	- possibilité de débloquer l'accès une fois arrivé dans la bonne pièce
-	- l'accès devient un chemin normal en permanence après déblocage
-	- ajouter un booleen dans les salles ?
-
 - Gestion des accès nécessitant des objets: fonction use sur des directions (sortie nécessitant les 2 médaillons)
 	- message disant genre "chemin pas encore ouvert.." si on essaie d'aller dans la direction
 	- eventuellement un message disant quels objets il nous manque
-
-- fonction use
-	- verification de la location avant utilisation (medaillon qui ne s'utilisent que dans "station_hall")
-
-- modifier le contenu de help
-
-- ajouter un etat de fin de partie (cas de victoire/ cas de mort)
-	- game over quand pv = 0
-	- victoire quand salle actuelle = la salle accessible avec les deux medaillons
-
-- ajouter une photo pour chaque pièce
-
-- ajouter une attaque pour les zombies
-	- inflige x degats apres x "tours" (actions du joueur)
-	- creation d'un game over quand pv du joueur = 0
-
-- fonctions go et flee
-	- empecher l'utilisation de go si il y a des zombies dans la salle, ou remplacer go par flee (dynamique)
-	- empecher l'utilisation de flee si il n'y a pas de zombies, ou remplacer flee par go (dynamique)
 
 BONUS
 
@@ -42,6 +17,13 @@ BONUS
 
 - nouvelles zones : agrandir le commissariat, ou rajouter d'autres niveaux (egouts et labo)
 
+- ajouter une photo pour chaque pièce
+
+- modifier le contenu de help
+
 - fonction shoot
 	- modifier degats fixes par degats random ?
 	- ajout possibilité de coups critiques ? degats x2
+
+- gestion des shortcuts (fonction unlock et goRoom dans Game.java, + hashMap states dans Room.java)
+	- rendre ça moins crade et moins horrible à gérer
