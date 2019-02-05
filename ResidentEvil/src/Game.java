@@ -11,6 +11,7 @@ public class Game {
     private Parser parser;
     private Room currentRoom;
     private Player player;
+    
     private Item ammo = new Item("ammo", 10);
     private Item herb = new Item("herb", 1);
     private Item medal = new Item("medal", 1);
@@ -21,7 +22,8 @@ public class Game {
     public Game() {
         createRooms();
         parser = new Parser();
-        player = new Player(2);    
+        player = new Player(2);
+        
     }
 
     /**
@@ -34,36 +36,36 @@ public class Game {
 
         // create the rooms
         // start
-        outside = new Room("in the streets of Fock City. You can see the police station from here. Zombies are all around you so you should hurry", rand.nextInt(10), herb);
+        outside = new Room("outside", "in the streets of Fock City. You can see the police station from here. Zombies are all around you so you should hurry");
         
         // Police Station rooms
         // Center
-        station_hall = new Room("in the main hall of the police station. This place is huge. You remember there's a secret passage under the big statue here, but you need two medaillons first ..", 0, herb);
-        station_1st_floor = new Room("above the police station hall", rand.nextInt(3), null);
+        station_hall = new Room("station_hall", "in the main hall of the police station. This place is huge. You remember there's a secret passage under the big statue here, but you need two medaillons first ..");
+        station_1st_floor = new Room("station_1st_floor", "above the police station hall");
         
         //West side
-        west_wing = new Room("in the west wing. The corridor is tight and only the moonlight brighten a bit this place..", rand.nextInt(3), null);
-        armory = new Room("in the armory. There's many weapons exposed here, but you need a keycard first", rand.nextInt(3), ammo);
-        west_stairs = new Room("in the front of the stairs. You can see a small room hide behind those", rand.nextInt(3), null);
-        black_room = new Room("in what looks like a black room. It looks safe but there's not much to see here", 0, herb);
-        west_corridor = new Room("in the corridor upstairs. A fading light is somehow lightening it", rand.nextInt(3), null);
-        squad_office = new Room("in the office of the squad unity. There should be something useful", 0, ammo);
-        reserve = new Room("in the reserve. It's really dark in here", rand.nextInt(3), null);
-        library = new Room("in the library. It's quite big and almost too bright, but you see one of the medals thanks to that!", rand.nextInt(3), medal);
+        west_wing = new Room("west_wing", "in the west wing. The corridor is tight and only the moonlight brighten a bit this place..");
+        armory = new Room("armory", "in the armory. There's many weapons exposed here, but you need a keycard first");
+        west_stairs = new Room("west_stairs", "in the front of the stairs. You can see a small room hide behind those");
+        black_room = new Room("black_room", "in what looks like a black room. It looks safe but there's not much to see here");
+        west_corridor = new Room("west_corridor", "in the corridor upstairs. A fading light is somehow lightening it");
+        squad_office = new Room("squad_office", "in the office of the squad unity. There should be something useful");
+        reserve = new Room("reserve", "in the reserve. It's really dark in here");
+        library = new Room("library", "in the library. It's quite big and almost too bright, but you see one of the medals thanks to that!");
         
         //East side
-        east_wing = new Room("in the east wing. The path looks long, and the weak moonlight shows you blood along the way", rand.nextInt(3), null);
-        bathroom = new Room("in the bathroom. The water is flowing from one of the sink", rand.nextInt(3), herb);
-        police_office = new Room("in the main police office. The desks are messy", rand.nextInt(3), ammo);
-        back_garden = new Room("in a small garden, which serves as a fire exit. There's an access to upstairs", 0, null);
-        east_corridor = new Room("in the corridor upstairs. It's the cleanest room you've seen yet", rand.nextInt(3), null);
-        chief_office = new Room("in the office of the police chief. It's quite small but it has to contain some ammo. Looks like you can unlock to access to the main hall from here", 0, ammo);
-        break_room = new Room("in the break room. Not much useful things here but it's a safe place", 0, herb);
-        roof = new Room("in the roof of the station. It's pouring rain here. There's a small building downstairs", rand.nextInt(3), null);
-        backyard_room = new Room("in the backyard room. There might be something useful ..", rand.nextInt(3), medal);
+        east_wing = new Room("east_wing", "in the east wing. The path looks long, and the weak moonlight shows you blood along the way");
+        bathroom = new Room("bathroom", "in the bathroom. The water is flowing from one of the sink");
+        police_office = new Room("police_office", "in the main police office. The desks are messy");
+        back_garden = new Room("back_garden", "in a small garden, which serves as a fire exit. There's an access to upstairs");
+        east_corridor = new Room("east_corridor", "in the corridor upstairs. It's the cleanest room you've seen yet");
+        chief_office = new Room("chief_office", "in the office of the police chief. It's quite small but it has to contain some ammo. Looks like you can unlock to access to the main hall from here");
+        break_room = new Room("break_room", "in the break room. Not much useful things here but it's a safe place");
+        roof = new Room("roof", "in the roof of the station. It's pouring rain here. There's a small building downstairs");
+        backyard_room = new Room("backyard_room", "in the backyard room. There might be something useful ..");
         
         //others
-        undergrounds = new Room("in the undergrounds of the station", rand.nextInt(3), null);
+        undergrounds = new Room("undergrounds", "in the undergrounds of the station. You escaped!");
 
         // initialise room exits
         // start
@@ -138,7 +140,21 @@ public class Game {
         //others
         undergrounds.setExit("up", station_hall);
 
+        
+        // place objects in rooms
+        station_hall.addItem(ammo);
+        library.addItem(medal);
+        backyard_room.addItem(medal);
+        
+        // place zombies in rooms
+        outside.setZombiesInt(15);
+        
+        // lock directions
+        station_hall.setState("down", true);
+        //library.setState("east", true);
+        
         currentRoom = outside;  // start game outside
+        medal.setRoom(station_hall); // set the use location for medal to station_hall
     }
 
     //private void createZombies(){}
@@ -156,6 +172,7 @@ public class Game {
         while (! finished) {
             Command command = parser.getCommand();
             finished = processCommand(command);
+            finished = step(command);
         }
         System.out.println("Thank you for playing.  Good bye.");
     }
@@ -191,29 +208,68 @@ public class Game {
 
         String commandWord = command.getCommandWord();
         if (commandWord.equals("help"))
-            printHelp();
-        else if (commandWord.equals("go"))
-            goRoom(command);
+            printHelp();     
         else if (commandWord.equals("quit"))
             wantToQuit = quit(command);
-        else if (commandWord.equals("flee"))
-        	flee(command);
         else if (commandWord.equals("look"))
         	look();
         else if (commandWord.equals("pickup"))
-        	pickup();
+        	pickup(command);
         else if (commandWord.equals("shoot"))
         	shoot(command);
         else if (commandWord.equals("use"))
         	use(command);
         else if (commandWord.equals("inventory"))
         	inventory();
-       else if (commandWord.equals("unlock"))
+        else if (commandWord.equals("unlock"))
         	unlock(command);
-       else if (commandWord.equals("reload"))
+        else if (commandWord.equals("reload"))
     	   reload();
+        else if(!currentRoom.getZombies().isEmpty()) {
+        	if (commandWord.equals("go"))
+        		System.out.println("you can't simply go! Zombies are here, you either have to shoot or to flee!");
+        	else if (commandWord.equals("flee"))
+        		flee(command);
+        }
+        else if (commandWord.equals("go"))
+            goRoom(command);
+        else if (commandWord.equals("flee"))
+        	System.out.println("There are no zombies here, you don't need to flee");
         
         return wantToQuit;
+    }
+    
+    //happens after a command
+    //ends the game if you are dead
+    //ends the game if you escaped
+    private boolean step(Command command){
+    	
+    	if(command.isUnknown()) {
+            return false;
+        }
+    	
+    	if(command.getCommandWord().equals("reload")
+    			|| command.getCommandWord().equals("pickup")
+    			|| command.getCommandWord().equals("use")
+    			|| command.getCommandWord().equals("unlock")){
+    		if(!currentRoom.getZombies().isEmpty()){
+            	for(int i=0;i<currentRoom.getZombies().size();i++){
+            		currentRoom.getZombies().get(i).attack(player);
+            		System.out.println("Zombie " + (i+1) + " attacks !");
+            		System.out.println("Your health: " + player.getHealth());
+            	}
+            }
+        	if(player.getHealth()<=0){
+        		System.out.println("You are dead!");
+        		return true;
+        	}
+    	}
+    	
+    	if(currentRoom.getName().equals("undergrounds")) {
+    		return true;
+    	}
+    	
+    	return false;
     }
     
     // implementations of user commands:
@@ -249,9 +305,49 @@ public class Game {
 	
         if (nextRoom == null) {
             System.out.println("There is no door!");
-        } else {
-            currentRoom = nextRoom;
-            printLocationInfo();
+        }
+        
+        //Attention partie crade
+        // verifie que le passage n'est pas ferm¨¦
+        else if(!currentRoom.getStates().isEmpty() && currentRoom.getStates().containsKey(direction)){
+        	
+        	if(currentRoom.getState(direction)==true) {
+        		System.out.println("This access is locked");
+        	}
+        	
+        	else {
+            	currentRoom = nextRoom;
+            	printLocationInfo();
+            }		
+        }
+        	
+        //Attention partie crade
+        // verifie que l'acc¨¨s n'est pas bloqu¨¦ depuis l'autre pi¨¨ce
+        else if(!nextRoom.getStates().isEmpty()){
+        	
+        	String opposite = nextRoom.getOpposite(direction);
+            	
+            if(nextRoom.getStates().containsKey(opposite)) {
+            	
+            	if(nextRoom.getState(opposite)==true) {
+            		System.out.println("This access is locked from the other side");
+            	}
+            	
+            	else {
+                	currentRoom = nextRoom;
+                	printLocationInfo();
+                }
+            }
+            	
+            else {
+            	currentRoom = nextRoom;
+            	printLocationInfo();
+            }
+        }	
+        
+       	else {
+        	currentRoom = nextRoom;
+        	printLocationInfo();
         }
     }
     
@@ -264,6 +360,7 @@ public class Game {
     }
     
     
+    //affiche le contenu de l'inventaire
     private void inventory(){
     	System.out.print("Your items: ");
     	for(int i=0;i<player.getItems().size();i++) {
@@ -274,6 +371,7 @@ public class Game {
     }
     
     
+    //recharge l'arme
     private void reload() {
     	if(!player.getItems().contains(ammo)) {
     		System.out.println("You don't have any ammo in your inventory dude");
@@ -311,17 +409,32 @@ public class Game {
     /**
      * flee est une commande qui permet au joueur de fuir
      */
+    // changement un peu crade
     private void flee (Command command){
     	
-    	Random rand = new Random();
-    	if(rand.nextInt(10) >= 5) {
-    		player.isAttacked();
-    	}
-    	System.out.println("Your health: " + player.getHealth());
-    	goRoom(command);
+        if (currentRoom.getExit(command.getSecondWord()) == null) {
+            System.out.println("There is no door!");
+        }
+    	
+        else if(!currentRoom.getName().equals("outside")) {
+        	Random rand = new Random();
+        	if(rand.nextInt(10) >= 5) {
+        		player.isAttacked();
+        		System.out.println("A zombie bite you while you were escaping!");
+        	}
+        	else {
+        		System.out.println("You managed to flee without getting hurt");
+        	}
+        	System.out.println("Your health: " + player.getHealth());
+        	goRoom(command);
+        }
+    	
+        else
+        	goRoom(command);
     }
     
     
+    //cible et tire sur un ennemi
     private void shoot (Command command){
     	if(player.getGun().getAmmo() == 0) {
     		System.out.println("No more ammo!");
@@ -361,6 +474,7 @@ public class Game {
     	
     }
     
+    //utilise un objet
     private void use(Command command) {
     	
     	if(!command.hasSecondWord()) {
@@ -392,6 +506,27 @@ public class Game {
     		System.out.println("Your current health: " + player.getHealth());
     		return;
     	}
+    	
+    	if(command.getSecondWord().equals("medal")){
+    		if(!player.getItems().contains(medal)) {
+    			System.out.println("You don't have any medal!");
+                return;
+    		}
+    		
+    		if(!currentRoom.getName().equals("station_hall")){
+    			System.out.println("You can't use this outside of the station_hall!");
+                return;
+    		}
+    		
+    		int pos = player.getItems().lastIndexOf(medal);
+    		player.getItems().get(pos).setNumber(player.getItems().get(pos).getNumber() - 1);
+    		if(player.getItems().get(pos).getNumber() == 0) {
+    			player.getItems().remove(pos);
+    		}
+    		
+    		System.out.println("You placed a medal!");
+    		return;
+    	}
 
     	System.out.println("What is that?");
     	return;
@@ -405,36 +540,53 @@ public class Game {
     	currentRoom.getLongDescription();
     }
     
-    private void pickup(){
+    private void pickup(Command command){
     	
-    	if(currentRoom.getItem() == null)
+    	if(currentRoom.getItems().isEmpty())	
     		System.out.println("There is no item here !");
     	
-    	else {
+    	else if(!command.hasSecondWord()) {
+    		System.out.println("Pickup what?");
+    	}
+    	
+    	else if(currentRoom.haveItemName(command.getSecondWord())){
     		
-    		System.out.println("You picked up " + currentRoom.getItem().getName());
+    		Item item = Item.findByName(command.getSecondWord(), currentRoom.getItems());
+    		System.out.println("You picked up " + item.getName());
     		
-    		if(!player.getItems().contains(currentRoom.getItem())) {
-    			player.getItems().add(currentRoom.getItem());
+    		if(!player.getItems().contains(item)) {
+    			player.getItems().add(item);
     		}
     		
         	else {
-        		int pos = player.getItems().lastIndexOf(currentRoom.getItem());
-        		player.getItems().get(pos).setNumber(player.getItems().get(pos).getNumber() + currentRoom.getItem().initial_number);
+        		int pos = player.getItems().lastIndexOf(item);
+        		player.getItems().get(pos).setNumber(player.getItems().get(pos).getNumber() + item.initial_number);
         	}
     		
-    		currentRoom.setItem(null);
+    		currentRoom.removeItem(item);
     	}   	
     	
     }
     
     private void unlock(Command command) {
     	
-    	if(!command.hasSecondWord()) {
+    	if(currentRoom.getStates().isEmpty()) {
+        	System.out.println("There's nothing to unlock in this direction");
+        }
+    	
+    	else if(!command.hasSecondWord()) {
             System.out.println("Unlock what?");
             return;
         }
     	
+    	else if(currentRoom.getState(command.getSecondWord()) == false) {
+        	System.out.println("This access is already unlocked");
+        }
+    	
+    	else {
+    		currentRoom.setState(command.getSecondWord(), false);
+    		System.out.println("You've unlocked the " + command.getSecondWord() + " access");
+    	}
     	
     }
 

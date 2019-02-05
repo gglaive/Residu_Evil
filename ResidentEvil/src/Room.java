@@ -6,25 +6,28 @@ import java.util.*;
  */
 
 public class Room {
+	private String name;
     private String description;
     private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
-    private HashMap<String, Room> exits;
-    private Item item;
+    private HashMap<String, Room> exits = new HashMap<String, Room>();
+    private ArrayList<Item> items = new ArrayList<Item>();
+    private HashMap<String, Boolean> states = new HashMap<String, Boolean>();
 
     /**
      * Crée une pièce avec une description.
      * @param description The room's description.
      */
-    public Room(String description, int random, Item item) {
+    public Room(String name, String description) {
+    	this.name = name;
         this.description = description;
-        exits = new HashMap<String, Room>();
-        if(random>0) {
-            for (int i=0; i<random; i++) {
-            	Zombie zombie = new Zombie(2);
-            	zombies.add(zombie);
-            }
-        }
-        this.item = item;
+    }
+    
+    public String getName() {
+    	return this.name;
+    }
+    
+    public void setName(String name) {
+    	this.name = name;
     }
     
     public ArrayList<Zombie> getZombies() {
@@ -35,6 +38,14 @@ public class Room {
     	this.zombies = zombies;
     }
     
+    public void setZombiesInt(int nb){
+    	zombies.clear();
+    	for (int i=0; i<nb; i++) {
+        	Zombie zombie = new Zombie(2);   	
+        	zombies.add(zombie);
+        }
+    }
+    
     public HashMap<String, Room> getExits() {
     	return exits;
     }
@@ -43,17 +54,49 @@ public class Room {
     	this.exits = exits;
     }
 
-    public Item getItem() {
-		return item;
+    public ArrayList<Item> getItems() {
+		return items;
 	}
 
-	public void setItem(Item item) {
-		this.item = item;
+	public void setItems(ArrayList<Item> items) {
+		this.items = items;
+	}
+	
+	public void addItem(Item item) {
+		items.add(item);
+	}
+	
+	public void removeItem(Item item) {
+		items.remove(item);
+	}
+	
+	public boolean haveItemName(String name) {
+		for(int i=0;i<items.size();i++) {
+			if(items.get(i).getName().equals(name))
+				return true;
+		}
+		return false;
 	}
 
 	public void setDescription(String description) {
     	this.description = description;
     }
+	
+	public HashMap<String, Boolean> getStates() {
+		return states;
+	}
+	
+	public void setStates(HashMap<String, Boolean> states){
+		this.states = states;
+	}
+	
+	public boolean getState(String direction) {
+		return states.get(direction);
+	}
+	
+	public void setState(String direction, Boolean state){
+		this.states.put(direction, state);
+	}
 
     /**
      * getExit permet de retourner un objet room
@@ -86,7 +129,24 @@ public class Room {
      * @param {Room} neighbor - valeur
      */
     public void setExit(String direction, Room neighbor) {
-	exits.put(direction, neighbor);
+    	exits.put(direction, neighbor);
+    }
+    
+    public String getOpposite(String direction) {
+    	String opposite ="";
+    	if(direction.matches("north"))
+    		opposite="south";
+    	if(direction.matches("south"))
+    		opposite="north";
+    	if(direction.matches("east"))
+    		opposite="west";
+    	if(direction.matches("west"))
+    		opposite="east";
+    	if(direction.matches("up"))
+    		opposite="down";
+    	if(direction.matches("down"))
+    		opposite="up";
+    	return opposite;
     }
 
     /**
@@ -110,8 +170,11 @@ public class Room {
     	if(zombies.size() > 0) {
     		System.out.println(zombies.size() + " yellow jackets");
     	}
-    	if(item != null) {
-    		System.out.println("There is an item here ! *" + getItem().getName() + "*");
+    	if(!items.isEmpty()) {
+    		System.out.println("Some items are here !");
+    		for(int i=0;i<items.size();i++) {
+    			System.out.println(" *" + items.get(i).getName() +"*");
+    		}
     	}
     	System.out.println(getExitString());
     	return;

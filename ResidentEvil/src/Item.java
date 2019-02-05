@@ -1,9 +1,11 @@
+import java.util.ArrayList;
 
 public class Item {
 
 	private String name;
 	private int number;
 	public int initial_number;
+	private Room room;
 
 	public Item(String name, int number) {
 		this.name = name;
@@ -27,5 +29,23 @@ public class Item {
 		this.number = number;
 	}
 	
+	public Room getRoom(){
+		return room;
+	}
+	
+	public void setRoom(Room room){
+		this.room = room;
+	}
+	
+	static public Item findByName(String s, ArrayList<Item> L) {
+        int n=0;
+        while (n < L.size()) {
+            Item i = L.get(n);
+            if (s.equals(i.getName())) 
+                return i;
+            n++;
+        }
+        return null;    // not found above
+    }
 	
 }

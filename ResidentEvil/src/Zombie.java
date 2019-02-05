@@ -12,5 +12,9 @@ public class Zombie {
 	public void setHealth(int health) {
 		this.health = health;
 	}
+	
+	public void attack(Player player){
+		player.setHealth(player.getHealth() -1);
+	}
 
 }

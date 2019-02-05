@@ -1,47 +1,29 @@
-TODO
+ÔªøTODO
 
-- Gestion des shortcuts (raccourcis) (via une fonction unlock?)
-	- acc®®s bloqu®¶ au d®¶but
-	- possibilit®¶ de d®¶bloquer l'acc®®s une fois arriv®¶ dans la bonne pi®®ce
-	- l'acc®®s devient un chemin normal en permanence apr®®s d®¶blocage
-	- ajouter un booleen dans les salles ?
-
-- Gestion des acc®®s n®¶cessitant des objets: fonction use sur des directions (sortie n®¶cessitant les 2 m®¶daillons)
+- Gestion des acc√®s n√©cessitant des objets: fonction use sur des directions (sortie n√©cessitant les 2 m√©daillons)
 	- message disant genre "chemin pas encore ouvert.." si on essaie d'aller dans la direction
 	- eventuellement un message disant quels objets il nous manque
-
-- fonction use
-	- verification de la location avant utilisation (medaillon qui ne s'utilisent que dans "station_hall")
-
-- modifier le contenu de help
-
-- ajouter un etat de fin de partie (cas de victoire/ cas de mort)
-	- game over quand pv = 0
-	- victoire quand salle actuelle = la salle accessible avec les deux medaillons
-
-- ajouter une photo pour chaque pi®®ce
-
-- ajouter une attaque pour les zombies
-	- inflige x degats apres x "tours" (actions du joueur)
-	- creation d'un game over quand pv du joueur = 0
-
-- fonctions go et flee
-	- empecher l'utilisation de go si il y a des zombies dans la salle, ou remplacer go par flee (dynamique)
-	- empecher l'utilisation de flee si il n'y a pas de zombies, ou remplacer flee par go (dynamique)
 
 BONUS
 
 - ajouter des objets
-	- des armes : fusil ®§ pompe (genre 3 degat), magnum (~5), et donc des munitions qui vont avec
-	- du soin : herbe rouge, ®§ combiner avec herbe normale pour restaurer toute sa vie, ou un spray de premier soin ®§ la place
-	- des objets cl®¶s : une cl®¶ pour d®¶verouiller une certaine porte (ex: cl®¶ pour ouvrir l'armory), une lampe torche pour avancer dans une piece sombre etc..
+	- des armes : fusil √† pompe (genre 3 degat), magnum (~5), et donc des munitions qui vont avec
+	- du soin : herbe rouge, √† combiner avec herbe normale pour restaurer toute sa vie, ou un spray de premier soin √† la place
+	- des objets cl√©s : une cl√© pour d√©verouiller une certaine porte (ex: cl√© pour ouvrir l'armory), une lampe torche pour avancer dans une piece sombre etc..
 
 - ajouter des ennemis
 	- un boss : un gros zombie (gilet jaune) avec beaucoup de pv, avant de finir le jeu
-	- des variantes de monstre : un gilet jaune ®§ casque, ou un chien zombie ..
+	- des variantes de monstre : un gilet jaune √† casque, ou un chien zombie ..
 
 - nouvelles zones : agrandir le commissariat, ou rajouter d'autres niveaux (egouts et labo)
 
+- ajouter une photo pour chaque pi√®ce
+
+- modifier le contenu de help
+
 - fonction shoot
 	- modifier degats fixes par degats random ?
-	- ajout possibilit®¶ de coups critiques ? degats x2
+	- ajout possibilit√© de coups critiques ? degats x2
+
+- gestion des shortcuts (fonction unlock et goRoom dans Game.java, + hashMap states dans Room.java)
+	- rendre √ßa moins crade et moins horrible √† g√©rer
