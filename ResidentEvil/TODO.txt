@@ -19,8 +19,6 @@ BONUS
 
 - ajouter une photo pour chaque pièce
 
-- modifier le contenu de help
-
 - fonction shoot
 	- modifier degats fixes par degats random ?
 	- ajout possibilité de coups critiques ? degats x2

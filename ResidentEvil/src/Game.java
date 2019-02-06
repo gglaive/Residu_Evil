@@ -142,7 +142,7 @@ public class Game {
 
         
         // place objects in rooms
-        station_hall.addItem(ammo);
+        station_hall.addItem(herb);
         library.addItem(medal);
         backyard_room.addItem(medal);
         
@@ -151,7 +151,7 @@ public class Game {
         
         // lock directions
         station_hall.setState("down", true);
-        //library.setState("east", true);
+        library.setState("east", true);
         
         currentRoom = outside;  // start game outside
         medal.setRoom(station_hall); // set the use location for medal to station_hall
@@ -225,6 +225,7 @@ public class Game {
         	unlock(command);
         else if (commandWord.equals("reload"))
     	   reload();
+        /*
         else if(!currentRoom.getZombies().isEmpty()) {
         	if (commandWord.equals("go"))
         		System.out.println("you can't simply go! Zombies are here, you either have to shoot or to flee!");
@@ -235,6 +236,9 @@ public class Game {
             goRoom(command);
         else if (commandWord.equals("flee"))
         	System.out.println("There are no zombies here, you don't need to flee");
+        */
+        else if (commandWord.equals("go"))
+        	flee(command);
         
         return wantToQuit;
     }
@@ -280,11 +284,17 @@ public class Game {
      * command words.
      */
     private void printHelp() {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around the streets.");
-        System.out.println();
         System.out.println("Your command words are:");
         parser.showCommands();
+        System.out.println();
+        System.out.println("go + *direction* = move to next location");
+        System.out.println("quit = stop the game");
+        System.out.println("shoot + *ZombieNumber* (ex: 2 zombies, 'shoot 1' means shoot on the zombie nÂ°1)");
+        System.out.println("look returns the description of the current room");
+        System.out.println("pickup + *ItemName* = get in your inventory the named item");
+        System.out.println("inventory shows you what you possess");
+        System.out.println("unlock + *direction* for unlocking a path");
+        System.out.println("reload = reload your current weapon");
     }
 
     /**
@@ -308,7 +318,7 @@ public class Game {
         }
         
         //Attention partie crade
-        // verifie que le passage n'est pas ferm¨¦
+        // verifie que le passage n'est pas ferme
         else if(!currentRoom.getStates().isEmpty() && currentRoom.getStates().containsKey(direction)){
         	
         	if(currentRoom.getState(direction)==true) {
@@ -322,7 +332,7 @@ public class Game {
         }
         	
         //Attention partie crade
-        // verifie que l'acc¨¨s n'est pas bloqu¨¦ depuis l'autre pi¨¨ce
+        // verifie que l'acces n'est pas bloque depuis l'autre piece
         else if(!nextRoom.getStates().isEmpty()){
         	
         	String opposite = nextRoom.getOpposite(direction);
