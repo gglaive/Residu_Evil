@@ -5,7 +5,6 @@ public class Item {
 	private String name;
 	private int number;
 	public int initial_number;
-	private Room room;
 
 	public Item(String name, int number) {
 		this.name = name;
@@ -29,13 +28,6 @@ public class Item {
 		this.number = number;
 	}
 	
-	public Room getRoom(){
-		return room;
-	}
-	
-	public void setRoom(Room room){
-		this.room = room;
-	}
 	
 	static public Item findByName(String s, ArrayList<Item> L) {
         int n=0;
@@ -45,7 +37,7 @@ public class Item {
                 return i;
             n++;
         }
-        return null;    // not found above
+        return null;
     }
 	
 }

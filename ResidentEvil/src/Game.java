@@ -13,8 +13,9 @@ public class Game {
     private Player player;
     
     private Item ammo = new Item("ammo", 10);
-    private Item herb = new Item("herb", 1);
-    private Item medal = new Item("medal", 1);
+    private HealItem herb = new HealItem("herb", 1, 1);
+    private HealItem spray = new HealItem("spray", 1, 2);
+    private KeyItem medal = new KeyItem("medal", 1);
 
     /**
      * Create the game and initialise its internal map.
@@ -155,6 +156,8 @@ public class Game {
         
         currentRoom = outside;  // start game outside
         medal.setRoom(station_hall); // set the use location for medal to station_hall
+        medal.setNeeded(2); // set the number of medals needed to unlock
+        medal.SetUseOn("down"); // set the direction the item can be used on
     }
 
     //private void createZombies(){}
@@ -225,18 +228,6 @@ public class Game {
         	unlock(command);
         else if (commandWord.equals("reload"))
     	   reload();
-        /*
-        else if(!currentRoom.getZombies().isEmpty()) {
-        	if (commandWord.equals("go"))
-        		System.out.println("you can't simply go! Zombies are here, you either have to shoot or to flee!");
-        	else if (commandWord.equals("flee"))
-        		flee(command);
-        }
-        else if (commandWord.equals("go"))
-            goRoom(command);
-        else if (commandWord.equals("flee"))
-        	System.out.println("There are no zombies here, you don't need to flee");
-        */
         else if (commandWord.equals("go"))
         	flee(command);
         
@@ -317,21 +308,15 @@ public class Game {
             System.out.println("There is no door!");
         }
         
-        //Attention partie crade
         // verifie que le passage n'est pas ferme
         else if(!currentRoom.getStates().isEmpty() && currentRoom.getStates().containsKey(direction)){
         	
         	if(currentRoom.getState(direction)==true) {
         		System.out.println("This access is locked");
-        	}
-        	
-        	else {
-            	currentRoom = nextRoom;
-            	printLocationInfo();
-            }		
+        		return;
+        	}	
         }
         	
-        //Attention partie crade
         // verifie que l'acces n'est pas bloque depuis l'autre piece
         else if(!nextRoom.getStates().isEmpty()){
         	
@@ -341,24 +326,12 @@ public class Game {
             	
             	if(nextRoom.getState(opposite)==true) {
             		System.out.println("This access is locked from the other side");
+            		return;
             	}
-            	
-            	else {
-                	currentRoom = nextRoom;
-                	printLocationInfo();
-                }
-            }
-            	
-            else {
-            	currentRoom = nextRoom;
-            	printLocationInfo();
             }
         }	
-        
-       	else {
-        	currentRoom = nextRoom;
-        	printLocationInfo();
-        }
+        currentRoom = nextRoom;
+        printLocationInfo();
     }
     
     /**
@@ -419,28 +392,27 @@ public class Game {
     /**
      * flee est une commande qui permet au joueur de fuir
      */
-    // changement un peu crade
     private void flee (Command command){
     	
         if (currentRoom.getExit(command.getSecondWord()) == null) {
             System.out.println("There is no door!");
+            return;
         }
     	
-        else if(!currentRoom.getName().equals("outside")) {
-        	Random rand = new Random();
-        	if(rand.nextInt(10) >= 5) {
-        		player.isAttacked();
-        		System.out.println("A zombie bite you while you were escaping!");
+        if(!currentRoom.getName().equals("outside")) {
+        	if(!currentRoom.getZombies().isEmpty()){
+        		Random rand = new Random();
+            	if(rand.nextInt(10) >= 5) {
+            		player.isAttacked();
+            		System.out.println("A zombie bite you while you were escaping!");
+            	}
+            	else {
+            		System.out.println("You managed to flee without getting hurt");
+            	}
+            	System.out.println("Your health: " + player.getHealth());            	
         	}
-        	else {
-        		System.out.println("You managed to flee without getting hurt");
-        	}
-        	System.out.println("Your health: " + player.getHealth());
-        	goRoom(command);
         }
-    	
-        else
-        	goRoom(command);
+        goRoom(command);
     }
     
     
@@ -492,54 +464,71 @@ public class Game {
             return;
         }
     	
-    	if(command.getSecondWord().equals("herb")) {
-    		if(!player.getItems().contains(herb)) {
-    			System.out.println("You don't have any herb!");
-                return;
-    		}
+    	switch(command.getSecondWord()){
+    	
+    		case "herb":
+    			useHeal(herb);
+    			break;
+    			
+    		case "spray":
+    			useHeal(spray);
+    			break;
+    			
+    		case "medal":
+    			useKey(medal);
+    			break;
     		
-    		if(player.getHealth() == player.max_health) {
-    			System.out.println("You are full health already.");
-    			System.out.println("Your current health: " + player.getHealth());
-                return;
-    		}
-    		
-    		player.setHealth(player.getHealth() +1);
-    		
-    		int pos = player.getItems().lastIndexOf(herb);
-    		player.getItems().get(pos).setNumber(player.getItems().get(pos).getNumber() - 1);
-    		if(player.getItems().get(pos).getNumber() == 0) {
-    			player.getItems().remove(pos);
-    		}
-    		
-    		System.out.println("You used a herb!");
-    		System.out.println("Your current health: " + player.getHealth());
-    		return;
+    		default:
+    			System.out.println("What is that?");
+    			break;
     	}
     	
-    	if(command.getSecondWord().equals("medal")){
-    		if(!player.getItems().contains(medal)) {
-    			System.out.println("You don't have any medal!");
-                return;
-    		}
-    		
-    		if(!currentRoom.getName().equals("station_hall")){
-    			System.out.println("You can't use this outside of the station_hall!");
-                return;
-    		}
-    		
-    		int pos = player.getItems().lastIndexOf(medal);
-    		player.getItems().get(pos).setNumber(player.getItems().get(pos).getNumber() - 1);
-    		if(player.getItems().get(pos).getNumber() == 0) {
-    			player.getItems().remove(pos);
-    		}
-    		
-    		System.out.println("You placed a medal!");
-    		return;
-    	}
-
-    	System.out.println("What is that?");
-    	return;
+    }
+    
+    private void useHeal(HealItem item){
+    	
+    	if(!player.getItems().contains(item)) {
+			System.out.println("You don't have any " + item.getName());
+            return;
+		}
+		
+		if(player.getHealth() == player.max_health) {
+			System.out.println("You are full health already.");
+			System.out.println("Your current health: " + player.getHealth());
+            return;
+		}
+		
+		player.setHealth(player.getHealth() + item.getHealing());
+		if(player.getHealth()>player.max_health)
+			player.setHealth(player.max_health);
+		
+		player.removeItem(item);
+		
+		System.out.println("You used a " + item.getName());
+		System.out.println("Your current health: " + player.getHealth());
+		return;
+    }
+    
+    private void useKey(KeyItem item){
+    	
+    	if(!player.getItems().contains(item)) {
+			System.out.println("You don't have any " + item.getName());
+            return;
+		}
+		
+		if(!currentRoom.getName().equals(item.getRoom().getName())){
+			System.out.println("You can't use this here");
+            return;
+		}
+		
+		player.removeItem(item);
+		
+		System.out.println("You used " + item.getName());
+		
+		item.setNeeded(item.getNeeded() -1);
+		if(item.getNeeded() == 0){
+			System.out.println("The access is unlocked!");
+		}
     }
 
     /**
@@ -586,7 +575,6 @@ public class Game {
     	
     	else if(!command.hasSecondWord()) {
             System.out.println("Unlock what?");
-            return;
         }
     	
     	else if(currentRoom.getState(command.getSecondWord()) == false) {

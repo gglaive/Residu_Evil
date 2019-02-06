@@ -4,6 +4,8 @@
 	- message disant genre "chemin pas encore ouvert.." si on essaie d'aller dans la direction
 	- eventuellement un message disant quels objets il nous manque
 
+- KeyRoom -> itemNeeded
+
 BONUS
 
 - ajouter des objets

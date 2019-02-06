@@ -30,11 +30,11 @@ public class Player extends Character{
 	}
 
 	public Weapon getGun() {
-	return gun;
+		return gun;
     }
     
     public void setGun(Weapon gun) {
-	this.gun = gun;
+    	this.gun = gun;
     }
     
     public void isAttacked() {
@@ -45,5 +45,13 @@ public class Player extends Character{
     
     public void isHealed() {
     	setHealth(getHealth() +1);
+    }
+    
+    public void removeItem(Item item){
+    	int pos = items.lastIndexOf(item);
+		items.get(pos).setNumber(items.get(pos).getNumber() - 1);
+		
+		if(items.get(pos).getNumber() == 0)
+			items.remove(pos);
     }
 }
