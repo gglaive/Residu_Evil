@@ -13,7 +13,7 @@ BONUS
 	- des objets à avoir dans l'inventaire (passif) : une lampe torche pour avancer dans une piece sombre etc..
 
 - ajouter des ennemis
-	- un boss : un gros zombie (gilet jaune) avec beaucoup de pv, avant de finir le jeu
+	- un boss : un gros zombie santa cruz (gilet jaune) avec beaucoup de pv, avant de finir le jeu
 	- des variantes de monstre : un gilet jaune à casque de 150kg, ou un chien zombie ..
 
 - nouvelles zones
@@ -27,4 +27,4 @@ BONUS
 	- ajout possibilité de coups critiques ? degats x2
 	
 - fonction attack de la classe Zombie
-	- modifier attaque à chaque action par genre 1/3 chance d'attaquer le joueur
+	- modifier attaque à chaque action par tour genre 1/3 chance d'attaquer le joueur
