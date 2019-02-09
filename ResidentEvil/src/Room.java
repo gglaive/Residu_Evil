@@ -12,6 +12,7 @@ public class Room {
     private HashMap<String, Room> exits = new HashMap<String, Room>();
     private ArrayList<Item> items = new ArrayList<Item>();
     private HashMap<String, Boolean> states = new HashMap<String, Boolean>();
+    private HashMap<String, Item> itemsNeeded = new HashMap<String, Item>();
 
     /**
      * Crée une pièce avec une description.
@@ -98,7 +99,23 @@ public class Room {
 		this.states.put(direction, state);
 	}
 
-    /**
+    public HashMap<String, Item> getItemsNeeded() {
+		return itemsNeeded;
+	}
+
+	public void setItemsNeeded(HashMap<String, Item> itemsNeeded) {
+		this.itemsNeeded = itemsNeeded;
+	}
+	
+	public Item getItemNeeded(String direction) {
+		return itemsNeeded.get(direction);
+	}
+	
+	public void setItemNeeded(String direction, Item item){
+		this.itemsNeeded.put(direction, item);
+	}
+
+	/**
      * getExit permet de retourner un objet room
      * en fonction d'une direction.
      * @param {String} direction
@@ -132,6 +149,7 @@ public class Room {
     	exits.put(direction, neighbor);
     }
     
+    // return the opposite direction from where the player is going
     public String getOpposite(String direction) {
     	String opposite ="";
     	if(direction.matches("north"))

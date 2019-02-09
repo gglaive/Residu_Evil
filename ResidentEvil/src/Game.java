@@ -12,10 +12,11 @@ public class Game {
     private Room currentRoom;
     private Player player;
     
-    private Item ammo = new Item("ammo", 10);
+    private Item ammo = new Item("ammo", 7);
     private HealItem herb = new HealItem("herb", 1, 1);
     private HealItem spray = new HealItem("spray", 1, 2);
     private KeyItem medal = new KeyItem("medal", 1);
+    private Weapon matilda = new Weapon("matilda", 1, 8, 12);
 
     /**
      * Create the game and initialise its internal map.
@@ -23,8 +24,8 @@ public class Game {
     public Game() {
         createRooms();
         parser = new Parser();
-        player = new Player(2);
-        
+        player = new Player(3);
+        player.setGun(matilda);
     }
 
     /**
@@ -32,8 +33,6 @@ public class Game {
      */
     private void createRooms() {
         Room outside, station_hall, station_1st_floor, west_wing, armory, west_stairs, black_room, west_corridor, squad_office, reserve, library, east_wing, bathroom, police_office, back_garden, east_corridor, chief_office, break_room, roof, backyard_room, undergrounds;
-        Random rand = new Random();
-        
 
         // create the rooms
         // start
@@ -52,7 +51,7 @@ public class Game {
         west_corridor = new Room("west_corridor", "in the corridor upstairs. A fading light is somehow lightening it");
         squad_office = new Room("squad_office", "in the office of the squad unity. There should be something useful");
         reserve = new Room("reserve", "in the reserve. It's really dark in here");
-        library = new Room("library", "in the library. It's quite big and almost too bright, but you see one of the medals thanks to that!");
+        library = new Room("library", "in the library. It's quite big and almost too bright. It's also full of zombies");
         
         //East side
         east_wing = new Room("east_wing", "in the east wing. The path looks long, and the weak moonlight shows you blood along the way");
@@ -130,7 +129,7 @@ public class Game {
         
         break_room.setExit("south", east_corridor);
         
-        chief_office.setExit("east", west_corridor);
+        chief_office.setExit("east", east_corridor);
         chief_office.setExit("west", station_1st_floor);
         
         roof.setExit("west", east_corridor);
@@ -143,16 +142,36 @@ public class Game {
 
         
         // place objects in rooms
-        station_hall.addItem(herb);
-        library.addItem(medal);
+        station_hall.addItem(spray);
+        armory.addItem(ammo);
+        black_room.addItem(herb);
+        squad_office.addItem(ammo);
+        chief_office.addItem(ammo);
+        police_office.addItem(ammo);
+        bathroom.addItem(herb);
+        break_room.addItem(herb);
+        reserve.addItem(medal);
         backyard_room.addItem(medal);
         
         // place zombies in rooms
         outside.setZombiesInt(15);
+        east_wing.setZombiesInt(3);
+        west_wing.setZombiesInt(1);
+        police_office.setZombiesInt(1);
+        east_corridor.setZombiesInt(2);
+        west_corridor.setZombiesInt(2);
+        backyard_room.setZombiesInt(2);
+        library.setZombiesInt(3);
+        west_stairs.setZombiesInt(2);
+        station_1st_floor.setZombiesInt(2);
         
         // lock directions
         station_hall.setState("down", true);
         library.setState("east", true);
+        east_corridor.setState("west", true);
+        
+        // add an item requirement for unlocking
+        station_hall.setItemNeeded("down", medal);
         
         currentRoom = outside;  // start game outside
         medal.setRoom(station_hall); // set the use location for medal to station_hall
@@ -222,8 +241,8 @@ public class Game {
         	shoot(command);
         else if (commandWord.equals("use"))
         	use(command);
-        else if (commandWord.equals("inventory"))
-        	inventory();
+        else if (commandWord.equals("player"))
+        	player();
         else if (commandWord.equals("unlock"))
         	unlock(command);
         else if (commandWord.equals("reload"))
@@ -242,28 +261,26 @@ public class Game {
     	if(command.isUnknown()) {
             return false;
         }
-    	
     	if(command.getCommandWord().equals("reload")
     			|| command.getCommandWord().equals("pickup")
     			|| command.getCommandWord().equals("use")
-    			|| command.getCommandWord().equals("unlock")){
+    			|| command.getCommandWord().equals("unlock")
+    			|| command.getCommandWord().equals("shoot")){
     		if(!currentRoom.getZombies().isEmpty()){
             	for(int i=0;i<currentRoom.getZombies().size();i++){
-            		currentRoom.getZombies().get(i).attack(player);
-            		System.out.println("Zombie " + (i+1) + " attacks !");
-            		System.out.println("Your health: " + player.getHealth());
+            		System.out.print("Zombie " + (i+1) + ": ");
+            		currentRoom.getZombies().get(i).attack(player);		
             	}
+            	System.out.println("Your health: " + player.getHealth());
             }
         	if(player.getHealth()<=0){
         		System.out.println("You are dead!");
         		return true;
         	}
     	}
-    	
     	if(currentRoom.getName().equals("undergrounds")) {
     		return true;
     	}
-    	
     	return false;
     }
     
@@ -271,8 +288,6 @@ public class Game {
     
     /**
      * Print out some help information.
-     * Here we print some stupid, cryptic message and a list of the
-     * command words.
      */
     private void printHelp() {
         System.out.println("Your command words are:");
@@ -283,7 +298,7 @@ public class Game {
         System.out.println("shoot + *ZombieNumber* (ex: 2 zombies, 'shoot 1' means shoot on the zombie n°1)");
         System.out.println("look returns the description of the current room");
         System.out.println("pickup + *ItemName* = get in your inventory the named item");
-        System.out.println("inventory shows you what you possess");
+        System.out.println("player shows your stats");
         System.out.println("unlock + *direction* for unlocking a path");
         System.out.println("reload = reload your current weapon");
     }
@@ -310,7 +325,6 @@ public class Game {
         
         // verifie que le passage n'est pas ferme
         else if(!currentRoom.getStates().isEmpty() && currentRoom.getStates().containsKey(direction)){
-        	
         	if(currentRoom.getState(direction)==true) {
         		System.out.println("This access is locked");
         		return;
@@ -319,11 +333,8 @@ public class Game {
         	
         // verifie que l'acces n'est pas bloque depuis l'autre piece
         else if(!nextRoom.getStates().isEmpty()){
-        	
         	String opposite = nextRoom.getOpposite(direction);
-            	
-            if(nextRoom.getStates().containsKey(opposite)) {
-            	
+            if(nextRoom.getStates().containsKey(opposite)) {      	
             	if(nextRoom.getState(opposite)==true) {
             		System.out.println("This access is locked from the other side");
             		return;
@@ -343,14 +354,15 @@ public class Game {
     }
     
     
-    //affiche le contenu de l'inventaire
-    private void inventory(){
+    //affiche les informations du joueur
+    private void player(){
+    	System.out.println("Your current health: " + player.getHealth());
+    	System.out.println("Ammo in weapon: " + player.getGun().getAmmo());
     	System.out.print("Your items: ");
     	for(int i=0;i<player.getItems().size();i++) {
     		System.out.print(player.getItems().get(i).getName() + " x" + player.getItems().get(i).getNumber() + " ");
     	}
     	System.out.println("");
-    	return;
     }
     
     
@@ -402,7 +414,7 @@ public class Game {
         if(!currentRoom.getName().equals("outside")) {
         	if(!currentRoom.getZombies().isEmpty()){
         		Random rand = new Random();
-            	if(rand.nextInt(10) >= 5) {
+            	if(rand.nextInt(10) >= 7) {
             		player.isAttacked();
             		System.out.println("A zombie bite you while you were escaping!");
             	}
@@ -440,6 +452,14 @@ public class Game {
     		return;
     	}
     	Zombie zombie = currentRoom.getZombies().get(zombie_number -1);
+    	Random rand = new Random();
+    	
+    	if(rand.nextInt(10) >= 6) {
+    		zombie.setAggro(zombie.getAggro() - 50);
+    		if(zombie.getAggro() < 0)
+    			zombie.setAggro(0);
+    		System.out.println("Zombie " + zombie_number + " flinched!");
+    	}
     	
     	zombie.setHealth(zombie.getHealth()-1);
     	player.getGun().setAmmo(player.getGun().getAmmo() -1);
@@ -485,6 +505,7 @@ public class Game {
     	
     }
     
+    
     private void useHeal(HealItem item){
     	
     	if(!player.getItems().contains(item)) {
@@ -509,6 +530,7 @@ public class Game {
 		return;
     }
     
+    
     private void useKey(KeyItem item){
     	
     	if(!player.getItems().contains(item)) {
@@ -527,7 +549,12 @@ public class Game {
 		
 		item.setNeeded(item.getNeeded() -1);
 		if(item.getNeeded() == 0){
-			System.out.println("The access is unlocked!");
+			currentRoom.setState(item.getUseOn(), false);
+			currentRoom.setItemNeeded(item.getUseOn(), null);
+			System.out.println("You've unlocked the " + item.getUseOn() + " access");
+		}
+		else {
+			System.out.println("You need " + item.getNeeded() + " more");
 		}
     }
 
@@ -580,6 +607,10 @@ public class Game {
     	else if(currentRoom.getState(command.getSecondWord()) == false) {
         	System.out.println("This access is already unlocked");
         }
+    	
+    	else if(currentRoom.getItemNeeded(command.getSecondWord()) != null) {
+    		System.out.println("You need to use an specific item first");
+    	}
     	
     	else {
     		currentRoom.setState(command.getSecondWord(), false);

@@ -10,7 +10,7 @@ public class Player extends Character{
     public Player(int health) {
     	super(health);
         this.isAlive = true;
-        this.gun = new Weapon("gun", 1, 12, 15);
+        
     }
 
     public boolean isAlive() {
