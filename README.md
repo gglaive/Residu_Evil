@@ -19,7 +19,7 @@ BONUS
 	- agrandir le commissariat
 	- rajouter d'autres niveaux (egouts et labo)
 
-- ajouter une photo pour chaque pièce
+- ajouter une photo pour chaque pièce (JFrame)
 
 - fonction shoot de la classe Game
 	- modifier degats fixes par degats random ?
