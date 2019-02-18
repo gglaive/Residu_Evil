@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Weapon
+comment1.params=name\ damage\ ammo\ max_ammo
+comment1.target=Weapon(java.lang.String,\ int,\ int,\ int)
+comment2.params=
+comment2.target=java.lang.String\ getName()
+comment3.params=name
+comment3.target=void\ setName(java.lang.String)
+comment4.params=
+comment4.target=int\ getDamage()
+comment5.params=damage
+comment5.target=void\ setDamage(int)
+comment6.params=
+comment6.target=int\ getAmmo()
+comment7.params=ammo
+comment7.target=void\ setAmmo(int)
+numComments=8

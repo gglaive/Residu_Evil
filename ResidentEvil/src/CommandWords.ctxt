@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=CommandWords
+comment0.text=\n\ CommandWords\ permet\ de\ verifi\u00E9\ la\ v\u00E9racit\u00E9\ des\ commandes.\n
+comment1.params=
+comment1.target=CommandWords()
+comment1.text=\n\ Constructeur\ -\ initialise\ les\ commandes.\n
+comment2.params=aString
+comment2.target=boolean\ isCommand(java.lang.String)
+comment2.text=\n\ Regarde\ si\ une\ chaine\ de\ caract\u00E8re\ est\ une\ commande\ valide.\n\ @method\ isCommand\n\ @param\ {String}\ aString\ -\n\ @return\ {boolean}\ -\ true\ si\ la\ chaine\ de\ caract\u00E8re\ en\n\ \ parametre\ est\ une\ commande\ valide,\ false\ sinon\n
+comment3.params=
+comment3.target=void\ showAll()
+comment3.text=\n\ Permet\ d'afficher\ la\ liste\ de\ toutes\ les\ commandes\n\ reconnu\ par\ le\ jeu.\n\ @method\ showAll\n
+numComments=4
