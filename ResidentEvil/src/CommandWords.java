@@ -33,10 +33,11 @@ public class CommandWords {
      * reconnu par le jeu.
      * @method showAll
      */
-    public void showAll() {
+    public String getCommandList() {
+    	String commandList = "";
     	for(String command : validCommands) {
-    		System.out.print(command + "  ");
+    		commandList += command + " ";
     	}
-    	System.out.println();
+    	return commandList;
     }
 }

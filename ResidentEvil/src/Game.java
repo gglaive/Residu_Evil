@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -10,6 +11,7 @@ import java.util.Random;
 public class Game {
     private Parser parser;
     private Room currentRoom;
+    private HashMap<String, Room> rooms = new HashMap<String, Room>();
     private Player player;
     
     private Item ammo = new Item("ammo", 7);
@@ -19,7 +21,7 @@ public class Game {
     private Weapon matilda = new Weapon("matilda", 1, 8, 12);
 
     /**
-     * Create the game and initialise its internal map.
+     * Create the game and initialize its internal map.
      */
     public Game() {
         createRooms();
@@ -33,39 +35,62 @@ public class Game {
      */
     private void createRooms() {
         Room outside, station_hall, station_1st_floor, west_wing, armory, west_stairs, black_room, west_corridor, squad_office, reserve, library, east_wing, bathroom, police_office, back_garden, east_corridor, chief_office, break_room, roof, backyard_room, undergrounds;
-
+        
         // create the rooms
         // start
-        outside = new Room("outside", "in the streets of Fock City. You can see the police station from here. Zombies are all around you so you should hurry");
+        outside = new Room("in the streets of Fock City. You can see the police station from here. Zombies are all around you so you should hurry");
         
         // Police Station rooms
         // Center
-        station_hall = new Room("station_hall", "in the main hall of the police station. This place is huge. You remember there's a secret passage under the big statue here, but you need two medaillons first ..");
-        station_1st_floor = new Room("station_1st_floor", "above the police station hall");
+        station_hall = new Room("in the main hall of the police station. This place is huge. You remember there's a secret passage under the big statue here, but you need two medaillons first ..");
+        station_1st_floor = new Room("above the police station hall");
         
         //West side
-        west_wing = new Room("west_wing", "in the west wing. The corridor is tight and only the moonlight brighten a bit this place..");
-        armory = new Room("armory", "in the armory. There's many weapons exposed here, but you need a keycard first");
-        west_stairs = new Room("west_stairs", "in the front of the stairs. You can see a small room hide behind those");
-        black_room = new Room("black_room", "in what looks like a black room. It looks safe but there's not much to see here");
-        west_corridor = new Room("west_corridor", "in the corridor upstairs. A fading light is somehow lightening it");
-        squad_office = new Room("squad_office", "in the office of the squad unity. There should be something useful");
-        reserve = new Room("reserve", "in the reserve. It's really dark in here");
-        library = new Room("library", "in the library. It's quite big and almost too bright. It's also full of zombies");
+        west_wing = new Room("in the west wing. The corridor is tight and only the moonlight brighten a bit this place..");
+        armory = new Room("in the armory. There's many weapons exposed here, but you need a keycard first");
+        west_stairs = new Room("in the front of the stairs. You can see a small room hide behind those");
+        black_room = new Room("in what looks like a black room. It looks safe but there's not much to see here");
+        west_corridor = new Room("in the corridor upstairs. A fading light is somehow lightening it");
+        squad_office = new Room("in the office of the squad unity. There should be something useful");
+        reserve = new Room("in the reserve. It's really dark in here");
+        library = new Room("in the library. It's quite big and almost too bright. It's also full of zombies");
         
         //East side
-        east_wing = new Room("east_wing", "in the east wing. The path looks long, and the weak moonlight shows you blood along the way");
-        bathroom = new Room("bathroom", "in the bathroom. The water is flowing from one of the sink");
-        police_office = new Room("police_office", "in the main police office. The desks are messy");
-        back_garden = new Room("back_garden", "in a small garden, which serves as a fire exit. There's an access to upstairs");
-        east_corridor = new Room("east_corridor", "in the corridor upstairs. It's the cleanest room you've seen yet");
-        chief_office = new Room("chief_office", "in the office of the police chief. It's quite small but it has to contain some ammo. Looks like you can unlock to access to the main hall from here");
-        break_room = new Room("break_room", "in the break room. Not much useful things here but it's a safe place");
-        roof = new Room("roof", "in the roof of the station. It's pouring rain here. There's a small building downstairs");
-        backyard_room = new Room("backyard_room", "in the backyard room. There might be something useful ..");
+        east_wing = new Room("in the east wing. The path looks long, and the weak moonlight shows you blood along the way");
+        bathroom = new Room("in the bathroom. The water is flowing from one of the sink");
+        police_office = new Room("in the main police office. The desks are messy");
+        back_garden = new Room("in a small garden, which serves as a fire exit. There's an access to upstairs");
+        east_corridor = new Room("in the corridor upstairs. It's the cleanest room you've seen yet");
+        chief_office = new Room("in the office of the police chief. It's quite small but it has to contain some ammo. Looks like you can unlock to access to the main hall from here");
+        break_room = new Room("in the break room. Not much useful things here but it's a safe place");
+        roof = new Room("in the roof of the station. It's pouring rain here. There's a small building downstairs");
+        backyard_room = new Room("in the backyard room. There might be something useful ..");
         
         //others
-        undergrounds = new Room("undergrounds", "in the undergrounds of the station. You escaped!");
+        undergrounds = new Room("in the undergrounds of the station. You escaped!");
+        
+        //Add all the rooms in 'rooms'
+        rooms.put("outside", outside);
+        rooms.put("station hall", station_hall);
+        rooms.put("station 1st floor", station_1st_floor);
+        rooms.put("west wing", west_wing);
+        rooms.put("armory", armory);
+        rooms.put("west stairs", west_stairs);
+        rooms.put("black room", black_room);
+        rooms.put("west corridor", west_corridor);
+        rooms.put("squad office", squad_office);
+        rooms.put("reserve", reserve);
+        rooms.put("library", library);
+        rooms.put("east wing", east_wing);
+        rooms.put("bathroom", bathroom);
+        rooms.put("police office", police_office);
+        rooms.put("back garden", back_garden);
+        rooms.put("east corridor", east_corridor);
+        rooms.put("chief office", chief_office);
+        rooms.put("break room", break_room);
+        rooms.put("roof", roof);
+        rooms.put("backyard room", backyard_room);
+        rooms.put("undergrounds", undergrounds);
 
         // initialise room exits
         // start
@@ -212,7 +237,7 @@ public class Game {
         System.out.println("Can you make it out alive?");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
-        printLocationInfo();
+        look();
     }
 
     /**
@@ -278,7 +303,7 @@ public class Game {
         		return true;
         	}
     	}
-    	if(currentRoom.getName().equals("undergrounds")) {
+    	if(currentRoom.equals(rooms.get("undergrounds"))) {
     		return true;
     	}
     	return false;
@@ -342,17 +367,16 @@ public class Game {
             }
         }	
         currentRoom = nextRoom;
-        printLocationInfo();
+        look();
     }
     
     /**
-     * Permet d'afficher à l'utilisateur dans 
-     * quelle pièce il est actuellement.
+     * look est une fonction qui permet au joueur d'avoir une
+     * description sur la piece où il se trouve actuellement.
      */
-    private void printLocationInfo(){
+    private void look(){
     	currentRoom.getLongDescription();
     }
-    
     
     //affiche les informations du joueur
     private void player(){
@@ -411,7 +435,7 @@ public class Game {
             return;
         }
     	
-        if(!currentRoom.getName().equals("outside")) {
+        if(!currentRoom.equals(rooms.get("outside"))) {
         	if(!currentRoom.getZombies().isEmpty()){
         		Random rand = new Random();
             	if(rand.nextInt(10) >= 7) {
@@ -538,7 +562,7 @@ public class Game {
             return;
 		}
 		
-		if(!currentRoom.getName().equals(item.getRoom().getName())){
+		if(!currentRoom.equals(item.getRoom())){
 			System.out.println("You can't use this here");
             return;
 		}
@@ -558,13 +582,7 @@ public class Game {
 		}
     }
 
-    /**
-     * look est une fonction qui permet au joueur d'avoir une
-     * description sur la piece où il se trouve actuellement.
-     */
-    private void look(){
-    	currentRoom.getLongDescription();
-    }
+    
     
     private void pickup(Command command){
     	

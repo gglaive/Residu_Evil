@@ -16,11 +16,11 @@ class Main {
     Fenetre fenetre = new Fenetre();
     
     //Jpanel
-    // Panneau p = new Panneau();
+    Panneau p = new Panneau();
     JPanel south = new JPanel();
     south.setPreferredSize(new Dimension(1000, 400));
     
-    //p.setPreferredSize(new Dimension(1000, 400));
+    p.setPreferredSize(new Dimension(1000, 400));
     //Label
     JLabel l = new JLabel("input here");
     south.add(l);
@@ -32,7 +32,7 @@ class Main {
     //north.add(p);
     
     fenetre.add(south, BorderLayout.SOUTH);
-    //fenetre.add(p, BorderLayout.NORTH);
+    fenetre.add(p, BorderLayout.NORTH);
     
     fenetre.setVisible(true);
 	

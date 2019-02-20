@@ -6,7 +6,6 @@ import java.util.*;
  */
 
 public class Room {
-	private String name;
     private String description;
     private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
     private HashMap<String, Room> exits = new HashMap<String, Room>();
@@ -18,17 +17,8 @@ public class Room {
      * Crée une pièce avec une description.
      * @param description The room's description.
      */
-    public Room(String name, String description) {
-    	this.name = name;
+    public Room(String description) {
         this.description = description;
-    }
-    
-    public String getName() {
-    	return this.name;
-    }
-    
-    public void setName(String name) {
-    	this.name = name;
     }
     
     public ArrayList<Zombie> getZombies() {
@@ -131,12 +121,13 @@ public class Room {
      * @return {String} - indique l'ensemble des sorties.
      */
     public String getExitString(){
-    	String exit = "Exits: ";
+    	StringBuilder exit = new StringBuilder();
+    	exit.append("Exits: ");
     	Set<String> keys = exits.keySet();
     	for (String key : keys){
-    		exit += " " + key;
+    		exit.append(" " + key);
     	}
-    	return exit;
+    	return exit.toString();
     }
 
     /**
