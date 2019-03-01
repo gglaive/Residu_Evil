@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Zombie
+comment1.params=health
+comment1.target=Zombie(int)
+comment2.params=
+comment2.target=int\ getHealth()
+comment3.params=health
+comment3.target=void\ setHealth(int)
+comment4.params=player
+comment4.target=void\ attack(Player)
+numComments=5

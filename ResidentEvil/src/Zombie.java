@@ -19,12 +19,13 @@ public class Zombie extends Character{
 	}
 
 
-	public void attack(Player player){
+	public String attack(Player player){
 		Random rand = new Random();
 		int random = rand.nextInt(10);
+		StringBuilder string = new StringBuilder("");
 		if((this.aggro >= 100) || (random == 9)){
 			player.setHealth(player.getHealth() -1);
-    		System.out.println("The zombie attacks !");
+			string.append("The zombie attacks ! \n");
     		this.aggro = 0;
 		}
 		
@@ -32,51 +33,52 @@ public class Zombie extends Character{
     		switch(random) {
     			
     		case 1:
-    			System.out.println("The zombie is just looking upward");
+    			string.append("The zombie is just looking upward \n");
     			this.aggro += 10;
     			break;
     		
     		case 2:
-    			System.out.println("The zombie stands still");
+    			string.append("The zombie stands still \n");
     			this.aggro += 15;
     			break;
     			
     		case 3:
-    			System.out.println("The zombie is looking at you");
+    			string.append("The zombie is looking at you \n");
     			this.aggro += 25;
     			break;
     			
     		case 4:
-    			System.out.println("The zombie is moving slowly");
+    			string.append("The zombie is moving slowly \n");
     			this.aggro += 30;
     			break;
     			
     		case 5:
-    			System.out.println("The zombie screams loudly");
+    			string.append("The zombie screams loudly \n");
     			this.aggro += 40;
     			break;
     			
     		case 6:
-    			System.out.println("The zombie raises its arm and tries to reach you");
+    			string.append("The zombie raises its arm and tries to reach you \n");
     			this.aggro += 50;
     			break;
     			
     		case 7:
-    			System.out.println("The zombie is heading towards you!");
+    			string.append("The zombie is heading towards you! \n");
     			this.aggro += 85;
     			break;
     			
     		case 8:
-    			System.out.println("The zombie is running at you!");
+    			string.append("The zombie is running at you! \n");
     			this.aggro += 100;
     			break;
 
     		default:
-    			System.out.println("The zombie is not paying attention");
+    			string.append("The zombie is not paying attention \n");
     			break;		
     		}  	
-    		System.out.println("Aggro: " + this.aggro + "%");
+    		string.append("Aggro: " + this.aggro + "% \n");	
     	}
+		return string.toString();
 	}
 
 }

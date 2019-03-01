@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=Player
+comment1.params=health
+comment1.target=Player(int)
+comment10.params=
+comment10.target=void\ isAttacked()
+comment11.params=
+comment11.target=void\ isHealed()
+comment2.params=
+comment2.target=int\ getHealth()
+comment3.params=health
+comment3.target=void\ setHealth(int)
+comment4.params=
+comment4.target=boolean\ isAlive()
+comment5.params=isAlive
+comment5.target=void\ setAlive(boolean)
+comment6.params=
+comment6.target=java.util.ArrayList\ getItems()
+comment7.params=items
+comment7.target=void\ setItems(java.util.ArrayList)
+comment8.params=
+comment8.target=Weapon\ getGun()
+comment9.params=gun
+comment9.target=void\ setGun(Weapon)
+numComments=12
