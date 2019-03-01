@@ -1,6 +1,11 @@
 TODO
 
-Rien ! Toutes les mécaniques vitales ont été codé ! Bravo à tous !
+Finir l'iteration 2
+
+Trouver des images !! au boulot les gars
+
+configurer proprement l'interface graphique moi j'y comprends rien
+
 
 BONUS
 
@@ -18,8 +23,6 @@ BONUS
 - nouvelles zones
 	- agrandir le commissariat
 	- rajouter d'autres niveaux (egouts et labo)
-
-- ajouter une photo pour chaque pièce (JFrame)
 
 - fonction shoot de la classe Game
 	- modifier degats fixes par degats random ?
