@@ -1,6 +1,8 @@
 TODO
 
-Finir l'iteration 2
+Faire des boutons pour remplacer les commandes (c'est dans l'iteration), moi c mort jfais pas du design
+
+Répondre aux différentes questions de l'itération 2
 
 Trouver des images !! au boulot les gars
 
