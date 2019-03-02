@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * Game est la classe principale du jeu, elle permet de creer
@@ -16,12 +17,14 @@ public class GameEngine {
     private HashMap<String, Room> rooms = new HashMap<String, Room>();
     private Player player;
     
-    private Item ammo = new Item("ammo", 7);
-    private HealItem herb = new HealItem("herb", 1, 1);
-    private HealItem spray = new HealItem("spray", 1, 2);
-    private KeyItem medal = new KeyItem("medal", 1);
-    private Weapon matilda = new Weapon("matilda", 1, 8, 12);
+    private Item ammo = new Item("Ammo", "Munitions for a simple gun", 7);
+    private HealItem herb = new HealItem("Herb", "An healing item that restore 1 health when used", 1, 1);
+    private HealItem spray = new HealItem("Spray", "An healing item that restore all health when used", 1, 2);
+    private KeyItem medal = new KeyItem("Medal", "A medal that should be used somewhere ..", 1);
+    private Weapon matilda = new Weapon("Matilda", 1, 8, 12);
 
+    private Stack<Room> roadHistory = new Stack<Room>();
+    
     /**
      * Create the game and initialize its internal map.
      */
@@ -52,31 +55,31 @@ public class GameEngine {
         // Police Station rooms
         // Center
         station_hall = new Room("in the main hall of the police station. This place is huge. You remember there's a secret passage under the big statue here, but you need two medaillons first ..", "station_hall.jpg");
-        station_1st_floor = new Room("above the police station hall", "outside.gif");
+        station_1st_floor = new Room("above the police station hall", "outside.jpg");
         
         //West side
         west_wing = new Room("in the west wing. The corridor is tight and only the moonlight brighten a bit this place..", "west_wing.jpg");
-        armory = new Room("in the armory. There's many weapons exposed here, but you need a keycard first", "outside.gif");
-        west_stairs = new Room("in the front of the stairs. You can see a small room hide behind those", "outside.gif");
-        black_room = new Room("in what looks like a black room. It looks safe but there's not much to see here", "outside.gif");
-        west_corridor = new Room("in the corridor upstairs. A fading light is somehow lightening it", "outside.gif");
-        squad_office = new Room("in the office of the squad unity. There should be something useful", "outside.gif");
-        reserve = new Room("in the reserve. It's really dark in here", "outside.gif");
-        library = new Room("in the library. It's quite big and almost too bright. It's also full of zombies", "outside.gif");
+        armory = new Room("in the armory. There's many weapons exposed here, but you need a keycard first", "outside.jpg");
+        west_stairs = new Room("in the front of the stairs. You can see a small room hide behind those", "outside.jpg");
+        black_room = new Room("in what looks like a black room. It looks safe but there's not much to see here", "outside.jpg");
+        west_corridor = new Room("in the corridor upstairs. A fading light is somehow lightening it", "outside.jpg");
+        squad_office = new Room("in the office of the squad unity. There should be something useful", "outside.jpg");
+        reserve = new Room("in the reserve. It's really dark in here", "outside.jpg");
+        library = new Room("in the library. It's quite big and almost too bright. It's also full of zombies", "outside.jpg");
         
         //East side
-        east_wing = new Room("in the east wing. The path looks long, and the weak moonlight shows you blood along the way", "outside.gif");
-        bathroom = new Room("in the bathroom. The water is flowing from one of the sink", "outside.gif");
-        police_office = new Room("in the main police office. The desks are messy", "outside.gif");
-        back_garden = new Room("in a small garden, which serves as a fire exit. There's an access to upstairs", "outside.gif");
-        east_corridor = new Room("in the corridor upstairs. It's the cleanest room you've seen yet", "outside.gif");
-        chief_office = new Room("in the office of the police chief. It's quite small but it has to contain some ammo. Looks like you can unlock to access to the main hall from here", "outside.gif");
-        break_room = new Room("in the break room. Not much useful things here but it's a safe place", "outside.gif");
-        roof = new Room("in the roof of the station. It's pouring rain here. There's a small building downstairs", "outside.gif");
-        backyard_room = new Room("in the backyard room. There might be something useful ..", "outside.gif");
+        east_wing = new Room("in the east wing. The path looks long, and the weak moonlight shows you blood along the way", "outside.jpg");
+        bathroom = new Room("in the bathroom. The water is flowing from one of the sink", "outside.jpg");
+        police_office = new Room("in the main police office. The desks are messy", "outside.jpg");
+        back_garden = new Room("in a small garden, which serves as a fire exit. There's an access to upstairs", "outside.jpg");
+        east_corridor = new Room("in the corridor upstairs. It's the cleanest room you've seen yet", "outside.jpg");
+        chief_office = new Room("in the office of the police chief. It's quite small but it has to contain some ammo. Looks like you can unlock to access to the main hall from here", "outside.jpg");
+        break_room = new Room("in the break room. Not much useful things here but it's a safe place", "outside.jpg");
+        roof = new Room("in the roof of the station. It's pouring rain here. There's a small building downstairs", "outside.jpg");
+        backyard_room = new Room("in the backyard room. There might be something useful ..", "outside.jpg");
         
         //others
-        undergrounds = new Room("in the undergrounds of the station. You escaped!", "outside.gif");
+        undergrounds = new Room("in the undergrounds of the station. You escaped!", "outside.jpg");
         
         //Add all the rooms in 'rooms'
         rooms.put("outside", outside);
@@ -207,10 +210,12 @@ public class GameEngine {
         // add an item requirement for unlocking
         station_hall.setItemNeeded("down", medal);
         
-        currentRoom = outside;  // start game outside
         medal.setRoom(station_hall); // set the use location for medal to station_hall
         medal.setNeeded(2); // set the number of medals needed to unlock
         medal.SetUseOn("down"); // set the direction the item can be used on
+        
+        currentRoom = outside;  // start game outside
+        
     }
 
     /**
@@ -243,7 +248,10 @@ public class GameEngine {
 
         String commandWord = command.getCommandWord();
         if (commandWord.equals("help"))
-            printHelp();
+        	if(command.hasSecondWord())
+        		gui.println("Just use help alone");
+        	else
+        		printHelp();
         else if (commandWord.equals("go"))
             goRoom(command);
         else if (commandWord.equals("look"))
@@ -255,11 +263,24 @@ public class GameEngine {
         else if (commandWord.equals("use"))
         	use(command);
         else if (commandWord.equals("player"))
-        	player();
+        	if(command.hasSecondWord())
+        		gui.println("Just use player alone");
+        	else
+        		player();
         else if (commandWord.equals("unlock"))
         	unlock(command);
         else if (commandWord.equals("reload"))
-    	   reload();
+        	if(command.hasSecondWord())
+        		gui.println("Just use reload alone");
+        	else
+        		reload();
+        else if (commandWord.equals("info"))
+     	   info(command);
+        else if (commandWord.equals("back"))
+        	if(command.hasSecondWord())
+        		gui.println("Just use back alone");
+        	else
+        		back();
         else if (commandWord.equals("quit")) {
             if(command.hasSecondWord())
                 gui.println("Quit what?");
@@ -318,6 +339,8 @@ public class GameEngine {
         gui.println("player = shows your stats");
         gui.println("unlock *direction* = unlocking a path");
         gui.println("reload = reload your current weapon");
+        gui.println("info *itemName* = display the description of the named item");
+        gui.println("back = return on the previous room");
     }
 
     /**
@@ -374,6 +397,7 @@ public class GameEngine {
         	}
         }
         
+        roadHistory.push(currentRoom);
         currentRoom = nextRoom;
         gui.println(currentRoom.getLongDescription());
         if(currentRoom.getImageName() != null)
@@ -610,6 +634,51 @@ public class GameEngine {
     		gui.println("You've unlocked the " + command.getSecondWord() + " access");
     	}
     	
+    }
+    
+    private void info(Command command) {
+    	
+    	if(!command.hasSecondWord()) {
+            gui.println("Info on what?");
+        }
+    	
+    	else {
+    		switch(command.getSecondWord()){
+        	
+    			case "herb":
+    				gui.println(herb.getDescription());
+    				break;
+    			
+    			case "spray":
+    				gui.println(spray.getDescription());
+    				break;
+    			
+    			case "medal":
+    				gui.println(medal.getDescription());
+    				break;
+    			
+    			case "ammo":
+    				gui.println(ammo.getDescription());
+    				break;
+    		
+    			default:
+    				gui.println("What is that?");
+    				break;
+    		}
+    	}
+    }
+    
+    private void back() {
+    	
+    	try {
+			currentRoom =roadHistory.pop();
+			gui.println(currentRoom.getLongDescription());
+	        if(currentRoom.getImageName() != null)
+	            gui.showImage(currentRoom.getImageName());
+	        
+		} catch (Exception e) {
+			gui.println("You can't go back any further");
+		}
     }
 
     /**

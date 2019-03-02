@@ -3,11 +3,13 @@ import java.util.ArrayList;
 public class Item {
 
 	private String name;
+	private String description;
 	private int number;
 	public int initial_number;
 
-	public Item(String name, int number) {
+	public Item(String name, String description, int number) {
 		this.name = name;
+		this.description = description;
 		this.number = number;
 		initial_number = number;
 	}
@@ -28,7 +30,14 @@ public class Item {
 		this.number = number;
 	}
 	
-	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	static public Item findByName(String s, ArrayList<Item> L) {
         int n=0;
         while (n < L.size()) {

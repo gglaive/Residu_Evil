@@ -2,8 +2,8 @@ public class HealItem extends Item {
 	
 	int healing;
 
-	public HealItem(String name, int number, int healing){
-		super(name, number);
+	public HealItem(String name, String description, int number, int healing){
+		super(name, description, number);
 		this.healing = healing;
 	}
 
