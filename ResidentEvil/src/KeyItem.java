@@ -5,8 +5,8 @@ public class KeyItem extends Item{
 	private int needed;
 	private String useOn;
 	
-	public KeyItem(String name, int number){
-		super(name, number);
+	public KeyItem(String name, String description, int number){
+		super(name, description, number);
 	}
 	
 	public Room getRoom(){

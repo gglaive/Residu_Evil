@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Parser
+comment0.text=\n\ La\ classe\ Parser\ permet\ de\ r\u00E9cup\u00E9rer\ le\ texte\ ecrit\n\ par\ l'utilisateur\ et\ de\ transformer\ se\ texte\ en\ commande.\n
+comment1.params=
+comment1.target=Parser()
+comment1.text=\n\ Create\ a\ parser\ to\ read\ from\ the\ terminal\ window.\n
+comment2.params=
+comment2.target=Command\ getCommand()
+comment2.text=\n\ @return\ The\ next\ command\ from\ the\ user.\n
+comment3.params=
+comment3.target=void\ showCommands()
+comment3.text=\n\ Affiche\ l'ensemble\ des\ commandes.\n
+numComments=4

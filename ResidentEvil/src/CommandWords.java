@@ -4,7 +4,7 @@
 public class CommandWords {
     // a constant array that holds all valid command words
     private static final String[] validCommands = {
-        "go", "quit", "help", "shoot", "look", "pickup", "use", "player", "unlock", "reload"
+        "go", "quit", "help", "shoot", "look", "pickup", "use", "player", "unlock", "reload", "info", "back"
     };
     
     /**
@@ -33,10 +33,12 @@ public class CommandWords {
      * reconnu par le jeu.
      * @method showAll
      */
-    public void showAll() {
-    	for(String command : validCommands) {
-    		System.out.print(command + "  ");
-    	}
-    	System.out.println();
+    public String getCommandList() 
+    {
+        StringBuilder commands = new StringBuilder();
+        for(int i = 0; i < validCommands.length; i++) {
+            commands.append( validCommands[i] + "  " );
+        }
+        return commands.toString();
     }
 }

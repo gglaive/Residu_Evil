@@ -6,29 +6,26 @@ import java.util.*;
  */
 
 public class Room {
-	private String name;
     private String description;
-    private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
-    private HashMap<String, Room> exits = new HashMap<String, Room>();
-    private ArrayList<Item> items = new ArrayList<Item>();
-    private HashMap<String, Boolean> states = new HashMap<String, Boolean>();
-    private HashMap<String, Item> itemsNeeded = new HashMap<String, Item>();
+    private String imageName;
+    private ArrayList<Zombie> zombies;
+    private HashMap<String, Room> exits;
+    private ArrayList<Item> items;
+    private HashMap<String, Boolean> states;
+    private HashMap<String, Item> itemsNeeded;
 
     /**
      * Crée une pièce avec une description.
      * @param description The room's description.
      */
-    public Room(String name, String description) {
-    	this.name = name;
+    public Room(String description, String image) {
         this.description = description;
-    }
-    
-    public String getName() {
-    	return this.name;
-    }
-    
-    public void setName(String name) {
-    	this.name = name;
+        zombies = new ArrayList<Zombie>();
+        exits = new HashMap<String, Room>();
+        items = new ArrayList<Item>();
+        states = new HashMap<String, Boolean>();
+        itemsNeeded = new HashMap<String, Item>();
+        imageName = image;
     }
     
     public ArrayList<Zombie> getZombies() {
@@ -131,12 +128,11 @@ public class Room {
      * @return {String} - indique l'ensemble des sorties.
      */
     public String getExitString(){
-    	String exit = "Exits: ";
-    	Set<String> keys = exits.keySet();
-    	for (String key : keys){
-    		exit += " " + key;
-    	}
-    	return exit;
+    	StringBuilder exit = new StringBuilder("Exits: ");
+    	//exit.append("Exits: ");
+    	for (String key : exits.keySet())
+    		exit.append(" " + key);
+    	return exit.toString();
     }
 
     /**
@@ -183,18 +179,23 @@ public class Room {
      * @method getLongDescription
      * @return {String} - description de l'objet courant et les sorties.
      */   
-    public void getLongDescription(){
-    	System.out.println("You are " + getDescription());
+    public String getLongDescription(){
+    	StringBuilder longDescription = new StringBuilder("You are " + getDescription() + "\n");
     	if(zombies.size() > 0) {
-    		System.out.println(zombies.size() + " yellow jackets");
+    		longDescription.append(zombies.size() + " yellow jackets" + "\n");
     	}
     	if(!items.isEmpty()) {
-    		System.out.println("Some items are here !");
+    		longDescription.append("Some items are here !" + "\n");
     		for(int i=0;i<items.size();i++) {
-    			System.out.println(" *" + items.get(i).getName() +"*");
+    			longDescription.append(" *" + items.get(i).getName() +"* \n");
     		}
     	}
-    	System.out.println(getExitString());
-    	return;
+    	longDescription.append(getExitString());
+    	return longDescription.toString();
     }
+    
+    public String getImageName()
+	{
+		return imageName;
+	}
 }
