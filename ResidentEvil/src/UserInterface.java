@@ -18,6 +18,7 @@ public class UserInterface implements ActionListener
     private JTextField entryField;
     private JTextArea log;
     private JLabel image;
+	private JButton but;
 
     /**
      * Construct a UserInterface. As a parameter, a Game Engine
@@ -60,7 +61,7 @@ public class UserInterface implements ActionListener
             System.out.println("image not found");
         else {
             ImageIcon icon = new ImageIcon(imageURL);
-            image.setIcon(icon);
+	    image.setIcon(icon);
             myFrame.pack();
         }
     }
@@ -90,12 +91,27 @@ public class UserInterface implements ActionListener
         listScroller.setMinimumSize(new Dimension(100,100));
 
         JPanel panel = new JPanel();
+	JPanel panelButton = new JPanel();
+ 	but = new JButton("back");
         image = new JLabel();
 
         panel.setLayout(new BorderLayout());
         panel.add(image, BorderLayout.NORTH);
         panel.add(listScroller, BorderLayout.CENTER);
-        panel.add(entryField, BorderLayout.SOUTH);
+        panel.add(panelButton, BorderLayout.SOUTH);
+
+	panelButton.add(entryField, BorderLayout.SOUTH);	
+	panelButton.add(but, BorderLayout.EAST);
+
+	//Definition de la fonction executer par le button
+	but.addActionListener(new ActionListener() {
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+        		engine.interpretCommand("back");
+    		}
+	});
+ 	
+       
 
         myFrame.getContentPane().add(panel, BorderLayout.CENTER);
 
