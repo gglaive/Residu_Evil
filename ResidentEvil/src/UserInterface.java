@@ -61,7 +61,7 @@ public class UserInterface implements ActionListener
             System.out.println("image not found");
         else {
             ImageIcon icon = new ImageIcon(imageURL);
-	    image.setIcon(icon);
+	    image.setIcon(new ImageIcon(icon.getImage().getScaledInstance(800, 800 * icon.getIconHeight() / icon.getIconWidth(), Image.SCALE_DEFAULT)));
             myFrame.pack();
         }
     }
