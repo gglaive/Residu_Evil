@@ -11,16 +11,15 @@ import java.util.Stack;
  */
 public class GameEngine {
     private Parser parser;
-    private Room currentRoom;
     private UserInterface gui;
     
     private HashMap<String, Room> rooms = new HashMap<String, Room>();
     private Player player;
     
-    private Item ammo = new Item("ammo", "Munitions for a simple gun", 7);
-    private HealItem herb = new HealItem("herb", "An healing item that restore 1 health when used", 1, 1);
-    private HealItem spray = new HealItem("spray", "An healing item that restore all health when used", 1, 2);
-    private KeyItem medal = new KeyItem("medal", "A medal that should be used somewhere ..", 1);
+    private Item ammo = new Item("ammo", "Munitions for a simple gun", 7, 1);
+    private HealItem herb = new HealItem("herb", "An healing item that restore 1 health when used", 1, 1, 1);
+    private HealItem spray = new HealItem("spray", "An healing item that restore all health when used", 1, 1, 2);
+    private KeyItem medal = new KeyItem("medal", "A medal that should be used somewhere ..", 1, 1);
     private Weapon matilda = new Weapon("Matilda", 1, 8, 12);
 
     private Stack<Room> roadHistory = new Stack<Room>();
@@ -31,7 +30,7 @@ public class GameEngine {
     public GameEngine() {
         createRooms();
         parser = new Parser();
-        player = new Player(3);
+        player = new Player(3,3,4,rooms.get("outside"));
         player.setGun(matilda);
     }
 
@@ -212,8 +211,7 @@ public class GameEngine {
         medal.setRoom(station_hall); // set the use location for medal to station_hall
         medal.setNeeded(2); // set the number of medals needed to unlock
         medal.SetUseOn("down"); // set the direction the item can be used on
-        
-        currentRoom = outside;  // start game outside    
+         
     }
 
     /**
@@ -243,49 +241,123 @@ public class GameEngine {
             return;
         }
 
-        String commandWord = command.getCommandWord();
-        if (commandWord.equals("help"))
-        	if(command.hasSecondWord())
+        CommandWord commandWord = command.getCommandWord();
+        
+        switch (commandWord) {
+		case HELP:
+			if(command.hasSecondWord())
         		gui.println("Just use help alone");
         	else
         		printHelp();
-        else if (commandWord.equals("go"))
+			break;
+
+		case GO:
+			goRoom(command);
+			break;
+			
+		case LOOK:
+			look();
+			break;
+			
+		case PICKUP:
+			pickup(command);
+			break;
+			
+		case DROP:
+			drop(command);
+			break;
+			
+		case SHOOT:
+			shoot(command);
+			break;
+			
+		case USE:
+			use(command);
+			break;
+			
+		case PLAYER:
+			if(command.hasSecondWord())
+        		gui.println("Just use player alone");
+        	else
+        		player();
+			break;
+			
+		case UNLOCK:
+			unlock(command);
+			break;
+			
+		case RELOAD:
+			if(command.hasSecondWord())
+        		gui.println("Just use reload alone");
+        	else
+        		reload();
+			break;
+			
+		case INFO:
+			info(command);
+			break;
+			
+		case BACK:
+			if(command.hasSecondWord())
+        		gui.println("Just use back alone");
+        	else
+        		back();
+			break;
+			
+		case QUIT:
+			if(command.hasSecondWord())
+                gui.println("Quit what?");
+            else
+                endGame();
+			break;
+			
+		default:
+			break;
+		}
+        
+        /*
+        if (commandWord == CommandWord.HELP)
+        	printHelp();
+        else if (commandWord == CommandWord.GO)
             goRoom(command);
-        else if (commandWord.equals("look"))
+        else if (commandWord == CommandWord.LOOK)
         	look();
-        else if (commandWord.equals("pickup"))
+        else if (commandWord == CommandWord.PICKUP)
         	pickup(command);
-        else if (commandWord.equals("shoot"))
+        else if (commandWord == CommandWord.DROP)
+        	drop(command);
+        else if (commandWord == CommandWord.SHOOT)
         	shoot(command);
-        else if (commandWord.equals("use"))
+        else if (commandWord == CommandWord.USE)
         	use(command);
-        else if (commandWord.equals("player"))
+        else if (commandWord == CommandWord.PLAYER)
         	if(command.hasSecondWord())
         		gui.println("Just use player alone");
         	else
         		player();
-        else if (commandWord.equals("unlock"))
+        else if (commandWord == CommandWord.UNLOCK)
         	unlock(command);
-        else if (commandWord.equals("reload"))
+        else if (commandWord == CommandWord.RELOAD)
         	if(command.hasSecondWord())
         		gui.println("Just use reload alone");
         	else
         		reload();
-        else if (commandWord.equals("info"))
+        else if (commandWord == CommandWord.INFO)
      	   info(command);
-        else if (commandWord.equals("back"))
+        else if (commandWord == CommandWord.BACK)
         	if(command.hasSecondWord())
         		gui.println("Just use back alone");
         	else
         		back();
-        else if (commandWord.equals("quit")) {
+        else if (commandWord == CommandWord.QUIT) {
             if(command.hasSecondWord())
                 gui.println("Quit what?");
             else
                 endGame();
-        }
+        }*/
         step(command);
         gui.println("");
+        
     }
     
     //happens after a command
@@ -296,17 +368,17 @@ public class GameEngine {
     	if(command.isUnknown()) {
             return;
         }
-    	if(command.getCommandWord().equals("reload")
-    			|| command.getCommandWord().equals("pickup")
-    			|| command.getCommandWord().equals("use")
-    			|| command.getCommandWord().equals("unlock")
-    			|| command.getCommandWord().equals("shoot")){   		
-    		if(!currentRoom.getZombies().isEmpty()){
+    	if(command.getCommandWord() == CommandWord.RELOAD
+    			|| command.getCommandWord() == CommandWord.PICKUP
+    			|| command.getCommandWord() == CommandWord.USE
+    			|| command.getCommandWord() == CommandWord.UNLOCK
+    			|| command.getCommandWord() == CommandWord.SHOOT){   		
+    		if(!player.getCurrentRoom().getZombies().isEmpty()){
     			gui.println("==========================================================");
     			gui.println("");
-            	for(int i=0;i<currentRoom.getZombies().size();i++){
+            	for(int i=0;i<player.getCurrentRoom().getZombies().size();i++){
             		gui.print("Yellow vest " + (i+1) + ": ");
-            		gui.println(currentRoom.getZombies().get(i).attack(player));		
+            		gui.println(player.getCurrentRoom().getZombies().get(i).attack(player));		
             	}
             	gui.println("Your health: " + player.getHealth());
             }
@@ -315,7 +387,7 @@ public class GameEngine {
         		endGame();
         	}
     	}
-    	if(currentRoom.equals(rooms.get("undergrounds"))) {
+    	if(player.getCurrentRoom().equals(rooms.get("undergrounds"))) {
     		endGame();
     	}
     	gui.println("==========================================================");
@@ -336,6 +408,8 @@ public class GameEngine {
         gui.println("shoot *ZombieNumber* (ex: 2 yellow vests, 'shoot 1' means shoot on the yellow vest number 1) = fire on a yellow vest");
         gui.println("look = returns the description of the current room");
         gui.println("pickup *ItemName* = get in your inventory the named item");
+        gui.println("drop *ItemName* = put the named item from your inventory to the current room");
+        gui.println("use *ItemName* = try to 'consume' the named item and apply its effects");
         gui.println("player = shows your stats");
         gui.println("unlock *direction* = unlocking a path");
         gui.println("reload = reload your current weapon");
@@ -344,8 +418,8 @@ public class GameEngine {
     }
 
     private void look() {
-    	gui.showImage(currentRoom.getImageName());
-        gui.println(currentRoom.getLongDescription());
+    	gui.showImage(player.getCurrentRoom().getImageName());
+        gui.println(player.getCurrentRoom().getLongDescription());
         gui.println("");
     }
     /**
@@ -362,7 +436,7 @@ public class GameEngine {
         String direction = command.getSecondWord();
 	
         // Try to leave current room.
-        Room nextRoom = currentRoom.getExit(direction);
+        Room nextRoom = player.getCurrentRoom().getExit(direction);
 	
         if (nextRoom == null) {
             gui.println("There is no door!");
@@ -370,8 +444,8 @@ public class GameEngine {
         }
         
         // verifie que le passage n'est pas ferme
-        else if(!currentRoom.getStates().isEmpty() && currentRoom.getStates().containsKey(direction)){
-        	if(currentRoom.getState(direction)==true) {
+        else if(!player.getCurrentRoom().getStates().isEmpty() && player.getCurrentRoom().getStates().containsKey(direction)){
+        	if(player.getCurrentRoom().getState(direction)==true) {
         		gui.println("This access is locked");
         		return;
         	}	
@@ -388,8 +462,8 @@ public class GameEngine {
             }
         }	
         
-        if(!currentRoom.equals(rooms.get("outside"))) {
-        	if(!currentRoom.getZombies().isEmpty()){
+        if(!player.getCurrentRoom().equals(rooms.get("outside"))) {
+        	if(!player.getCurrentRoom().getZombies().isEmpty()){
         		Random rand = new Random();
             	if(rand.nextInt(10) >= 7) {
             		player.isAttacked();
@@ -402,11 +476,11 @@ public class GameEngine {
         	}
         }
         
-        roadHistory.push(currentRoom);
-        currentRoom = nextRoom;
-        gui.println(currentRoom.getLongDescription());
-        if(currentRoom.getImageName() != null)
-            gui.showImage(currentRoom.getImageName());
+        roadHistory.push(player.getCurrentRoom());
+        player.setCurrentRoom(nextRoom);
+        gui.println(player.getCurrentRoom().getLongDescription());
+        if(player.getCurrentRoom().getImageName() != null)
+            gui.showImage(player.getCurrentRoom().getImageName());
     }
     
     
@@ -468,17 +542,17 @@ public class GameEngine {
             return;
         }
     	
-    	if(currentRoom.getZombies().isEmpty()) {
+    	if(player.getCurrentRoom().getZombies().isEmpty()) {
     		gui.println("No yellow vests here!");
     		return;
     	}
     	
     	int zombie_number =  Integer.parseInt(command.getSecondWord());
-    	if(zombie_number > currentRoom.getZombies().size()) {
+    	if(zombie_number > player.getCurrentRoom().getZombies().size()) {
     		gui.println("Not that much yellow vests here! What are you aiming at?");
     		return;
     	}
-    	Zombie zombie = currentRoom.getZombies().get(zombie_number -1);
+    	Zombie zombie = player.getCurrentRoom().getZombies().get(zombie_number -1);
     	Random rand = new Random();
     	
     	if(rand.nextInt(10) >= 6) {
@@ -496,9 +570,9 @@ public class GameEngine {
     	
     	if(zombie.getHealth() == 0) {
     		gui.println("Yellow vest " + zombie_number + " is dead !");
-    		ArrayList<Zombie> zombies = currentRoom.getZombies();
+    		ArrayList<Zombie> zombies = player.getCurrentRoom().getZombies();
     		zombies.remove(zombie_number -1);
-    		currentRoom.setZombies(zombies);
+    		player.getCurrentRoom().setZombies(zombies);
     	}
     	
     }
@@ -540,15 +614,15 @@ public class GameEngine {
             return;
 		}
 		
-		if(player.getHealth() == player.max_health) {
+		if(player.getHealth() == player.getMax_health()) {
 			gui.println("You are full health already.");
 			gui.println("Your current health: " + player.getHealth());
             return;
 		}
 		
 		player.setHealth(player.getHealth() + item.getHealing());
-		if(player.getHealth()>player.max_health)
-			player.setHealth(player.max_health);
+		if(player.getHealth()>player.getMax_health())
+			player.setHealth(player.getMax_health());
 		
 		player.removeItem(item);
 		
@@ -565,7 +639,7 @@ public class GameEngine {
             return;
 		}
 		
-		if(!currentRoom.equals(item.getRoom())){
+		if(!player.getCurrentRoom().equals(item.getRoom())){
 			gui.println("You can't use this here");
             return;
 		}
@@ -576,8 +650,8 @@ public class GameEngine {
 		
 		item.setNeeded(item.getNeeded() -1);
 		if(item.getNeeded() == 0){
-			currentRoom.setState(item.getUseOn(), false);
-			currentRoom.setItemNeeded(item.getUseOn(), null);
+			player.getCurrentRoom().setState(item.getUseOn(), false);
+			player.getCurrentRoom().setItemNeeded(item.getUseOn(), null);
 			gui.println("You've unlocked the " + item.getUseOn() + " access");
 		}
 		else {
@@ -585,24 +659,32 @@ public class GameEngine {
 		}
     }
 
-    
-    
+      
     private void pickup(Command command){
     	
-    	if(currentRoom.getItems().isEmpty())	
+    	if(player.getCurrentRoom().getItems().isEmpty())	
     		gui.println("There is no item here !");
     	
     	else if(!command.hasSecondWord()) {
     		gui.println("Pickup what?");
     	}
     	
-    	else if(currentRoom.haveItemName(command.getSecondWord())){
+    	else if(!player.getCurrentRoom().haveItemName(command.getSecondWord())) {
+    		gui.println("There's no such item here, or it doesn't exist");
+    	}
+    	
+    	else {
     		
-    		Item item = Item.findByName(command.getSecondWord(), currentRoom.getItems());
-    		gui.println("You picked up " + item.getName());
+    		Item item = Item.findByName(command.getSecondWord(), player.getCurrentRoom().getItems());
     		
     		if(!player.getItems().contains(item)) {
-    			player.getItems().add(item);
+    			if(player.getItems().size() == player.getMax_inventory()) {
+    				gui.println("Your inventory is full already!");
+    				return;
+    			}
+    			else {
+    				player.getItems().add(item);
+    			}			
     		}
     		
         	else {
@@ -610,14 +692,40 @@ public class GameEngine {
         		player.getItems().get(pos).setNumber(player.getItems().get(pos).getNumber() + item.initial_number);
         	}
     		
-    		currentRoom.removeItem(item);
+    		gui.println("You picked up " + item.getName());
+    		
+    		player.getCurrentRoom().removeItem(item);
     	}   	
     	
     }
     
+    
+    private void drop(Command command) {
+    	
+    	if(!command.hasSecondWord()) {
+    		gui.println("Drop what?");
+    	}
+    	
+    	else {
+    		Item item = Item.findByName(command.getSecondWord(), player.getItems());
+        	
+        	if(!player.getItems().contains(item)) {
+        		gui.println("You don't have that item on you, or it doesn't exist");
+        	}
+        	
+        	else {
+        		player.getCurrentRoom().addItem(item);
+        		player.getItems().remove(item);
+        		gui.println("You dropped " + item.getName());
+        	}
+    	}
+    	
+    }
+    
+    
     private void unlock(Command command) {
     	
-    	if(currentRoom.getStates().isEmpty()) {
+    	if(player.getCurrentRoom().getStates().isEmpty()) {
         	gui.println("There's nothing to unlock in this direction");
         }
     	
@@ -625,16 +733,16 @@ public class GameEngine {
             gui.println("Unlock what?");
         }
     	
-    	else if(currentRoom.getState(command.getSecondWord()) == false) {
+    	else if(player.getCurrentRoom().getState(command.getSecondWord()) == false) {
         	gui.println("This access is already unlocked");
         }
     	
-    	else if(currentRoom.getItemNeeded(command.getSecondWord()) != null) {
+    	else if(player.getCurrentRoom().getItemNeeded(command.getSecondWord()) != null) {
     		gui.println("You need to use an specific item first");
     	}
     	
     	else {
-    		currentRoom.setState(command.getSecondWord(), false);
+    		player.getCurrentRoom().setState(command.getSecondWord(), false);
     		gui.println("You've unlocked the " + command.getSecondWord() + " access");
     	}
     	
@@ -675,10 +783,10 @@ public class GameEngine {
     private void back() {
     	
     	try {
-			currentRoom =roadHistory.pop();
-			gui.println(currentRoom.getLongDescription());
-	        if(currentRoom.getImageName() != null)
-	            gui.showImage(currentRoom.getImageName());
+			player.setCurrentRoom(roadHistory.pop());
+			gui.println(player.getCurrentRoom().getLongDescription());
+	        if(player.getCurrentRoom().getImageName() != null)
+	            gui.showImage(player.getCurrentRoom().getImageName());
 	        
 		} catch (Exception e) {
 			gui.println("You can't go back any further");

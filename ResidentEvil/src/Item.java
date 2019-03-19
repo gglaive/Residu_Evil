@@ -6,12 +6,14 @@ public class Item {
 	private String description;
 	private int number;
 	public int initial_number;
+	private int inventory_space;
 
-	public Item(String name, String description, int number) {
+	public Item(String name, String description, int number, int inventory_space) {
 		this.name = name;
 		this.description = description;
 		this.number = number;
 		initial_number = number;
+		this.inventory_space = inventory_space;
 	}
 
 	public String getName() {
@@ -36,6 +38,14 @@ public class Item {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public int getInventory_space() {
+		return inventory_space;
+	}
+
+	public void setInventory_space(int inventory_space) {
+		this.inventory_space = inventory_space;
 	}
 
 	static public Item findByName(String s, ArrayList<Item> L) {

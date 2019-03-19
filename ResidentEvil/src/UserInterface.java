@@ -22,6 +22,7 @@ public class UserInterface implements ActionListener
 	private JButton lookButton;
 	private JButton playerButton;
 	private JButton reloadButton;
+	private JButton helpButton;
 	private JButton quitButton;
 
     /**
@@ -100,6 +101,7 @@ public class UserInterface implements ActionListener
         lookButton = new JButton("look");
         playerButton = new JButton("player");
         reloadButton = new JButton("reload");
+        helpButton = new JButton("help");
         quitButton = new JButton("quit");
         image = new JLabel();
 
@@ -113,6 +115,7 @@ public class UserInterface implements ActionListener
         panelButton.add(lookButton, BorderLayout.EAST);
         panelButton.add(playerButton, BorderLayout.EAST);
         panelButton.add(reloadButton, BorderLayout.EAST);
+        panelButton.add(helpButton, BorderLayout.EAST);
         panelButton.add(quitButton, BorderLayout.EAST);
 
         //Definition de la fonction execute par le button
@@ -141,6 +144,13 @@ public class UserInterface implements ActionListener
     		@Override
     		public void actionPerformed(ActionEvent e) {
         		engine.interpretCommand("reload");
+    		}
+        });
+        
+        helpButton.addActionListener(new ActionListener() {
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+        		engine.interpretCommand("help");
     		}
         });
         

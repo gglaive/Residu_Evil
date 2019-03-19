@@ -1,17 +1,31 @@
+import java.util.HashMap;
+
 /**
  * CommandWords permet de verifié la véracité des commandes.
  */
 public class CommandWords {
-    // a constant array that holds all valid command words
-    private static final String[] validCommands = {
-        "go", "quit", "help", "shoot", "look", "pickup", "use", "player", "unlock", "reload", "info", "back"
-    };
+    
+	private HashMap<String, CommandWord> validCommands;
     
     /**
      * Constructeur - initialise les commandes.
      */
     public CommandWords() {
-        // nothing to do at the moment...
+    	validCommands = new HashMap<String, CommandWord>();
+        for (CommandWord command : CommandWord.values()) {
+          if (command != CommandWord.UNKNOWN) {
+            validCommands.put(command.toString(), command);
+          }
+        }
+    }
+    
+    public CommandWord getCommandWord(String commandWord) {
+      CommandWord command = (CommandWord)validCommands.get(commandWord);
+      if (command != null) {
+        return command;
+      }
+      
+      return CommandWord.UNKNOWN;
     }
 
     /**
@@ -22,23 +36,13 @@ public class CommandWords {
      *  parametre est une commande valide, false sinon
      */
     public boolean isCommand(String aString) {
-        for(int i = 0; i < validCommands.length; i++) {
-            if(validCommands[i].equals(aString)) return true;
-        }
-        return false;
+    	return validCommands.containsKey(aString);
     }
 
-    /**
-     * Permet d'afficher la liste de toutes les commandes
-     * reconnu par le jeu.
-     * @method showAll
-     */
-    public String getCommandList() 
-    {
-        StringBuilder commands = new StringBuilder();
-        for(int i = 0; i < validCommands.length; i++) {
-            commands.append( validCommands[i] + "  " );
-        }
-        return commands.toString();
+    public void showAll() {
+      for (String command : validCommands.keySet()) {
+        System.out.print(command + "  ");
+      }
+      System.out.println();
     }
 }
