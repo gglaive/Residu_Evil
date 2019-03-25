@@ -1,17 +1,21 @@
-
+import java.util.List;
+import java.util.Arrays;
 
 public enum CommandWord {
 
-	GO("go"),  QUIT("quit"), HELP("help"), SHOOT("shoot"), LOOK("look"), PICKUP("pickup"),
-	DROP("drop"), USE("use"), PLAYER("player"), UNLOCK("unlock"), RELOAD("reload"), INFO("info"), BACK("back"), UNKNOWN("?");
+	TEST("test"),
+	GO("go", "aller", "يذهب"),  QUIT("quit", "quitter"), HELP("help", "aide"), SHOOT("shoot", "tirer"),
+	LOOK("look", "regarder"), PICKUP("pickup", "prendre"), DROP("drop", "deposer"),
+	USE("use", "utiliser"), PLAYER("player", "joueur"), UNLOCK("unlock", "deverouiller"),
+	RELOAD("reload", "recharger"), INFO("info"), BACK("back", "retour"), UNKNOWN("?");
 
-	  private String commandString;
+	  private List<String> commandString;
 
-	  private CommandWord(String commandString){
-	    this.commandString = commandString;
+	  private CommandWord(String ...commandString){
+	    this.commandString = Arrays.asList(commandString);
 	  }
-	  
-	  public String toString(){
+
+	  public List<String> getValues(){
 	    return commandString;
 	  }
 }

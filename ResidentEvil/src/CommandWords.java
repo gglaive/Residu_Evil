@@ -4,27 +4,28 @@ import java.util.HashMap;
  * CommandWords permet de verifié la véracité des commandes.
  */
 public class CommandWords {
-    
+
 	private HashMap<String, CommandWord> validCommands;
-    
+
     /**
      * Constructeur - initialise les commandes.
      */
     public CommandWords() {
     	validCommands = new HashMap<String, CommandWord>();
-        for (CommandWord command : CommandWord.values()) {
-          if (command != CommandWord.UNKNOWN) {
-            validCommands.put(command.toString(), command);
+        for (CommandWord commands : CommandWord.values()) {
+          if (commands != CommandWord.UNKNOWN) {
+						for(String command : commands.getValues())
+            	validCommands.put(command, commands);
           }
         }
     }
-    
+
     public CommandWord getCommandWord(String commandWord) {
       CommandWord command = (CommandWord)validCommands.get(commandWord);
       if (command != null) {
         return command;
       }
-      
+
       return CommandWord.UNKNOWN;
     }
 
