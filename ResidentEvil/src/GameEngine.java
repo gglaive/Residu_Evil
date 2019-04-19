@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.nio.charset.Charset;
 
 /**
  * Game est la classe principale du jeu, elle permet de creer
@@ -28,6 +27,8 @@ public class GameEngine {
     private HealItem herb = new HealItem("herb", "An healing item that restore 1 health when used", 1, 1, 1);
     private HealItem spray = new HealItem("spray", "An healing item that restore all health when used", 1, 1, 2);
     private KeyItem medal = new KeyItem("medal", "A medal that should be used somewhere ..", 1, 1);
+    private KeyItem beamer = new KeyItem("beamer", "Use it first to save the current room in the beamer, then re-use it to teleport from anywhere to the saved room. NOTE : This item should not be used in your classic playthrough", 1, 2);
+    private int beamerCount = 0;
     private Weapon matilda = new Weapon("Matilda", 1, 8, 12);
 
     private Stack<Room> roadHistory = new Stack<Room>();
@@ -52,7 +53,7 @@ public class GameEngine {
      * Create all the rooms and link their exits together.
      */
     private void createRooms() {
-        Room outside, station_hall, station_1st_floor, west_wing, locker_room, west_stairs, black_room, west_corridor, squad_office, reserve, library, east_wing, bathroom, police_office, back_garden, east_corridor, waiting_room, break_room, roof, backyard_room, undergrounds;
+        Room outside, station_hall, station_1st_floor, west_wing, locker_room, west_stairs, black_room, west_corridor, squad_office, reserve, library, east_wing, bathroom, police_office, back_garden, east_corridor, waiting_room, break_room, roof, backyard_room, undergrounds, warning;
 
         // create the rooms
         // start
@@ -65,11 +66,11 @@ public class GameEngine {
 
         //West side
         west_wing = new Room("in the west wing. The corridor is tight and only the moonlight brighten a bit this place..", "img/west_wing.jpg");
-        locker_room = new Room("in the locker_room. There may be useful leftovers to take here", "img/locker_room.jpg");
+        locker_room = new Room("in the locker_room. There may be useful leftovers to take here. Also, you can see a hole in the ceiling", "img/locker_room.jpg");
         west_stairs = new Room("in the front of the stairs. You can see a small room hide behind those", "img/west_stairs.jpg");
         black_room = new Room("in what looks like a black room. It looks safe but there's not much to see here", "img/black_room.jpg");
         west_corridor = new Room("in the corridor upstairs. A fading light is somehow lightening it", "img/west_corridor.jpg");
-        squad_office = new Room("in the office of the squad unity. There should be something useful", "img/squad_office.jpg");
+        squad_office = new Room("in the office of the squad unity. There is a huge hole on the ground leading down", "img/squad_office.jpg");
         reserve = new Room("in the reserve. It's really dark in here", "img/reserve.jpg");
         library = new Room("in the library. It's quite big and almost too bright. It's also full of yellow vests", "img/library.jpg");
 
@@ -85,7 +86,8 @@ public class GameEngine {
         backyard_room = new Room("in the backyard room. There might be something useful ..", "img/backyard_room.jpg");
 
         //others
-        undergrounds = new Room("in the undergrounds of the station. You escaped!", "outside.jpg");
+        undergrounds = new Room("in the undergrounds of the station. You escaped!", "img/gameover.jpg");
+        warning = new Room("in a strange room. It says 'THE ROOM AFTER TELEPORTS YOU ANYWHERE ON THE MAP. IF YOU DON'T WANT TO USE IT, GO BACK'", "img/warning.gif");
 
         //Add all the rooms in 'rooms'
         rooms.put("outside", outside);
@@ -110,6 +112,13 @@ public class GameEngine {
         rooms.put("backyard room", backyard_room);
         rooms.put("undergrounds", undergrounds);
 
+        ArrayList<Room> roomsList = new ArrayList<Room>(rooms.values());
+        //Randomizer room
+        RoomRandomizer roomRandomizer = new RoomRandomizer(roomsList);
+        
+        //Teleport Room
+        TransporterRoom transporter = new TransporterRoom("in a weird looking place that should not be here. You feel like leaving this place could leave you anywhere", "img/teleport_room.png", roomRandomizer);
+        
         // initialise room exits
         // start
         outside.setExit("north", station_hall);
@@ -125,6 +134,10 @@ public class GameEngine {
         station_1st_floor.setExit("west", library);
         station_1st_floor.setExit("east", waiting_room);
         station_1st_floor.setExit("down", station_hall);
+        station_1st_floor.setExit("up", warning);
+        
+        warning.setExit("down", station_1st_floor);
+        warning.setExit("up", transporter);
 
         // West side
         west_wing.setExit("east", station_hall);
@@ -144,6 +157,7 @@ public class GameEngine {
         west_corridor.setExit("east", reserve);
 
         squad_office.setExit("east", west_corridor);
+        squad_office.setExit("down", locker_room);
 
         reserve.setExit("west", west_corridor);
         reserve.setExit("south", library);
@@ -186,6 +200,7 @@ public class GameEngine {
 
         // place objects in rooms
         station_hall.addItem(spray);
+        station_hall.addItem(beamer); // It exists only because it is asked on Iteration 4, do not pick it up on a basic playthrough
         locker_room.addItem(ammo);
         black_room.addItem(herb);
         squad_office.addItem(ammo);
@@ -210,6 +225,7 @@ public class GameEngine {
 
         // lock directions
         station_hall.setState("down", true);
+        locker_room.setState("east", true);
         library.setState("east", true);
         east_corridor.setState("west", true);
 
@@ -283,9 +299,9 @@ public class GameEngine {
 			use(command);
 			break;
 
-    case TEST:
-      test(command);
-      break;
+		case TEST:
+			test(command);
+			break;
 
 		case PLAYER:
 			if(command.hasSecondWord())
@@ -413,7 +429,7 @@ public class GameEngine {
      */
     private void printHelp() {
         gui.println("Your command words are:");
-        parser.showCommands();
+        gui.println(parser.showCommands());
         gui.print("\n");
         gui.println("go *direction* = move to next location");
         gui.println("quit = stop the game");
@@ -495,6 +511,7 @@ public class GameEngine {
             gui.showImage(player.getCurrentRoom().getImageName());
     }
 
+    //execute a file to play the game
     private void test(Command command) {
       	if(!command.hasSecondWord()) {
       		  gui.println("Test what?");
@@ -629,7 +646,11 @@ public class GameEngine {
     		case "medal":
     			useKey(medal);
     			break;
-
+    		
+    		case "beamer":
+    			useBeamer(beamer);
+    			break;
+    			
     		default:
     			gui.println("What is that?");
     			break;
@@ -690,6 +711,26 @@ public class GameEngine {
   		}
     }
 
+    private void useBeamer(KeyItem beamer) {
+    	
+    	if(!player.getItems().contains(beamer)) {
+		     gui.println("You don't have any " + beamer.getName());
+		     return;
+		}
+    	
+    	if(beamerCount == 0) {
+    		beamer.setRoom(player.getCurrentRoom());
+    		gui.println("The beamer saved the current room");
+    		beamerCount = 1;
+    	}
+    	
+    	else if(beamerCount == 1) {
+    		player.setCurrentRoom(beamer.getRoom());
+    		look();
+    		gui.println("The beamer teleported you in the saved location. You need to resave a location before reusing it");
+    		beamerCount = 0;
+    	}
+    }
 
     private void pickup(Command command){
 
@@ -798,6 +839,10 @@ public class GameEngine {
 
     			case "ammo":
     				gui.println(ammo.getDescription());
+    				break;
+    				
+    			case "beamer":
+    				gui.println(beamer.getDescription());
     				break;
 
     			default:

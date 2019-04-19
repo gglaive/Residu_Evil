@@ -46,4 +46,13 @@ public class CommandWords {
       }
       System.out.println();
     }
+
+	public HashMap<String, CommandWord> getValidCommands() {
+		return validCommands;
+	}
+
+	public void setValidCommands(HashMap<String, CommandWord> validCommands) {
+		this.validCommands = validCommands;
+	}
+    
 }
