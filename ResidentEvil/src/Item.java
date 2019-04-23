@@ -1,5 +1,11 @@
 import java.util.ArrayList;
 
+/**
+ * @author Geoffrey Glaive
+ * @version 03.2019
+ * Class that instantiates "item" elements.
+ */
+
 public class Item {
 
 	private String name;

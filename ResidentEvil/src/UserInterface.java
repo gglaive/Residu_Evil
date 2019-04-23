@@ -2,15 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
-//import java.awt.image.*;
 
 /**
- * This class implements a simple graphical user interface with a text entry
- * area, a text output area and an optional image.
- * 
- * @author Michael Kolling
- * @version 1.0 (Jan 2003)
+ * @author Geoffrey Glaive, Florian Vazelle
+ * @version 03.2019
+ * Class that instantiates the interface the user will interacts with.
  */
+
 public class UserInterface implements ActionListener
 {
     private GameEngine engine;

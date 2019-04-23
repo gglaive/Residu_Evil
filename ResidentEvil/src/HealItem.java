@@ -1,3 +1,9 @@
+/**
+ * @author Geoffrey Glaive
+ * @version 03.2019
+ * Subclass of "Item" that interacts with the "health" attribute of the "Character" class
+ */
+
 public class HealItem extends Item {
 	
 	int healing;

@@ -1,6 +1,8 @@
 /**
- * La classe Command permet de crée un object commande.
+ * @author Geoffrey Glaive
+ * @version 03.2019
  */
+
 public class Command {
 	private CommandWord commandWord;
     private String secondWord;

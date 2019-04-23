@@ -1,5 +1,11 @@
 import java.util.ArrayList;
 
+/**
+ * @author Geoffrey Glaive
+ * @version 03.2019
+ * Subclass of "Character" that focus on the creation of a player with important attributes such as his inventory or if he is alive.
+ */
+
 public class Player extends Character{
 	
     private int max_health;

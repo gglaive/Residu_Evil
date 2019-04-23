@@ -1,6 +1,12 @@
 import java.util.List;
 import java.util.Arrays;
 
+/**
+ * @author Geoffrey Glaive, Florian Vazelle
+ * @version 03.2019
+ * Class that matches words typed by the player with functional commands.
+ */
+
 public enum CommandWord {
 
 	TEST("test"),

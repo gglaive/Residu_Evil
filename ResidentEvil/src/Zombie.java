@@ -1,5 +1,11 @@
 import java.util.Random;
 
+/**
+ * @author Geoffrey Glaive
+ * @version 02.2019
+ * Subclass of "Character" that manages the "Zombie" type foes.
+ */
+
 public class Zombie extends Character{
 
 	int aggro;

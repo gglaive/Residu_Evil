@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * @author Geoffrey Glaive
+ * @version 04.2019
+ * Class used for randomizing an exit for a "Room' element.
+ */
+
 public class RoomRandomizer {
 
 	private ArrayList<Room> rooms = new ArrayList<Room>();

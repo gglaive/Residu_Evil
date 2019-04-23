@@ -11,11 +11,11 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Game est la classe principale du jeu, elle permet de creer
- * l'environnement du jeu, permet de le lancer, et d'executer
- * les commandes. Elle fait communiquer l'ensemble des classes
- * entre elles.
+ * @author Geoffrey Glaive, Florian Vazelle
+ * @version 04.2019
+ * GameEngine is the most important class. It creates the game elements, and allows all classes to communicate.
  */
+
 public class GameEngine {
     private Parser parser;
     private UserInterface gui;

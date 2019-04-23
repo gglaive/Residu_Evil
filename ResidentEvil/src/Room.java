@@ -1,8 +1,9 @@
 import java.util.*;
 
 /**
- * Room est une classe permettant d'instancier un object "Room" (piece)
- * avec des sorties.
+ * @author Geoffrey Glaive
+ * @version 03.2019
+ * Class that manages the contents of a room, such as its items, exits or zombies.
  */
 
 public class Room {
@@ -15,7 +16,7 @@ public class Room {
     private HashMap<String, Item> itemsNeeded;
 
     /**
-     * Crée une pièce avec une description.
+     * Cree une piece avec une description.
      * @param description The room's description.
      */
     public Room(String description, String image) {
@@ -116,14 +117,14 @@ public class Room {
      * getExit permet de retourner un objet room
      * en fonction d'une direction.
      * @param {String} direction
-     * @return {Room} - retourne la sortie dans la direction indiqué
+     * @return {Room} - retourne la sortie dans la direction indique
      */
     public Room getExit(String direction){
     	return exits.get(direction);
     }
 
     /**
-     * getExitString permet de retourner en chaine de caractère
+     * getExitString permet de retourner en chaine de caractere
      * l'ensemble des sorties de la piece courante.
      * @return {String} - indique l'ensemble des sorties.
      */
@@ -138,7 +139,7 @@ public class Room {
     /**
      * Permet de fixer une sortie.
      * @method setExit
-     * @param {String} direction - clé
+     * @param {String} direction - cle
      * @param {Room} neighbor - valeur
      */
     public void setExit(String direction, Room neighbor) {
@@ -164,7 +165,7 @@ public class Room {
     }
 
     /**
-     * Permet de récupérer la description courante.
+     * Permet de recuperer la description courante.
      * @method getDescription
      * @return {String} - description de l'objet courant
      */
@@ -174,7 +175,7 @@ public class Room {
 
 
 	/**
-     * Permet de récupérer la description courante,
+     * Permet de recuperer la description courante,
      * ainsi que la liste des sorties. 
      * @method getLongDescription
      * @return {String} - description de l'objet courant et les sorties.

@@ -1,3 +1,9 @@
+/**
+ * @author Geoffrey Glaive
+ * @version 03.2019
+ * Class that instantiate a game.
+ */
+
 public class Game
 {
 	private UserInterface gui;

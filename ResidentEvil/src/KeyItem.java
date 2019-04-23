@@ -1,3 +1,8 @@
+/**
+ * @author Geoffrey Glaive
+ * @version 03.2019
+ * Subclass of "Item" that interacts with the "states" attribute of the "Room" class
+ */
 
 public class KeyItem extends Item{
 

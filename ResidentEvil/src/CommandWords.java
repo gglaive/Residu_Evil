@@ -1,8 +1,11 @@
 import java.util.HashMap;
 
 /**
- * CommandWords permet de verifié la véracité des commandes.
+ * @author Geoffrey Glaive
+ * @version 04.2019
+ * Class that check if a command is valid or not.
  */
+
 public class CommandWords {
 
 	private HashMap<String, CommandWord> validCommands;
@@ -30,10 +33,10 @@ public class CommandWords {
     }
 
     /**
-     * Regarde si une chaine de caractère est une commande valide.
+     * Regarde si une chaine de caractere est une commande valide.
      * @method isCommand
      * @param {String} aString -
-     * @return {boolean} - true si la chaine de caractère en
+     * @return {boolean} - true si la chaine de caractere en
      *  parametre est une commande valide, false sinon
      */
     public boolean isCommand(String aString) {

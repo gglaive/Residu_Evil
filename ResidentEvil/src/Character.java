@@ -1,3 +1,8 @@
+/**
+ * @author Geoffrey Glaive
+ * @version 02.2019
+ * Class that allows the creation of characters in the game, with an attribute "health".
+ */
 
 public class Character {
 

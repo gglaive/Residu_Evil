@@ -1,3 +1,8 @@
+/**
+ * @author Geoffrey Glaive
+ * @version 03.2019
+ * Subclass of "Room" that rewrite the "getExit" method to use "RoomRandomizer".
+ */
 
 public class TransporterRoom extends Room{
 
