@@ -29,7 +29,7 @@ public class GameEngine {
     private KeyItem medal = new KeyItem("medal", "A medal that should be used somewhere ..", 1, 1);
     private KeyItem beamer = new KeyItem("beamer", "Use it first to save the current room in the beamer, then re-use it to teleport from anywhere to the saved room. NOTE : This item should not be used in your classic playthrough", 1, 2);
     private int beamerCount = 0;
-    private Weapon matilda = new Weapon("Matilda", 1, 8, 12);
+    private Weapon matilda = new Weapon("Matilda", "Your service handgun", 1, 1, 1, 8, 12);
 
     private Stack<Room> roadHistory = new Stack<Room>();
 
@@ -40,6 +40,7 @@ public class GameEngine {
         createRooms();
         parser = new Parser();
         player = new Player(3,3,4,rooms.get("outside"));
+        player.getItems().add(matilda);
         player.setGun(matilda);
     }
 
@@ -535,7 +536,12 @@ public class GameEngine {
     //affiche les informations du joueur
     private void player(){
     	gui.println("Your current health: " + player.getHealth());
-    	gui.println("Ammo in weapon: " + player.getGun().getAmmo());
+    	if(player.getGun() == null) {
+    		gui.println("No weapon equipped!");
+    	}
+    	else {
+    		gui.println("Ammo in weapon: " + player.getGun().getAmmo());
+    	}
     	gui.print("Your items: ");
     	for(int i=0;i<player.getItems().size();i++) {
     		gui.print(player.getItems().get(i).getName() + " x" + player.getItems().get(i).getNumber() + " ");
@@ -546,6 +552,11 @@ public class GameEngine {
 
     //recharge l'arme
     private void reload() {
+    	if(player.getGun() == null) {
+    		gui.println("No weapon equipped!");
+    		return;
+    	}
+    	
     	if(!player.getItems().contains(ammo)) {
     		gui.println("You don't have any ammo in your inventory dude \n");
             return;
@@ -580,6 +591,11 @@ public class GameEngine {
 
     //cible et tire sur un ennemi
     private void shoot (Command command){
+    	if(player.getGun() == null) {
+    		gui.println("No weapon equipped!");
+    		return;
+    	}
+    	
     	if(player.getGun().getAmmo() == 0) {
     		gui.println("No more ammo!");
     		return;
@@ -649,6 +665,10 @@ public class GameEngine {
     		
     		case "beamer":
     			useBeamer(beamer);
+    			break;
+    		
+    		case "matilda":
+    			useWeapon(matilda);
     			break;
     			
     		default:
@@ -729,6 +749,25 @@ public class GameEngine {
     		look();
     		gui.println("The beamer teleported you in the saved location. You need to resave a location before reusing it");
     		beamerCount = 0;
+    	}
+    }
+    
+    private void useWeapon(Weapon weapon) {
+    	
+    	if(!player.getItems().contains(weapon)) {
+		     gui.println("You don't have any " + weapon.getName());
+		     return;
+		}
+    	
+    	if(player.hasWeapon()) {
+    		player.setGun(null);
+    		player.setHasWeapon(false);
+    		gui.println("You are no more equipped with the " + weapon.getName());
+    	}
+    	
+    	else {
+    		player.setGun(weapon);
+    		gui.println("You take the " + weapon.getName());
     	}
     }
 

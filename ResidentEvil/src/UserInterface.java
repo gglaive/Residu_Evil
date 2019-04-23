@@ -22,6 +22,7 @@ public class UserInterface implements ActionListener
 	private JButton reloadButton;
 	private JButton helpButton;
 	private JButton quitButton;
+	JPanel panelButton;
 
     /**
      * Construct a UserInterface. As a parameter, a Game Engine
@@ -75,8 +76,17 @@ public class UserInterface implements ActionListener
     public void enable(boolean on)
     {
         entryField.setEditable(on);
-        if(!on)
-            entryField.getCaret().setBlinkRate(0);
+        backButton.setEnabled(on);
+        lookButton.setEnabled(on);
+        playerButton.setEnabled(on);
+        reloadButton.setEnabled(on);
+        helpButton.setEnabled(on);
+        quitButton.setEnabled(on);
+        if(!on) {
+        	entryField.getCaret().setBlinkRate(0);
+        	
+        }
+            
     }
 
     /**

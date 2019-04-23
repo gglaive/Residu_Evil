@@ -13,11 +13,13 @@ public class Player extends Character{
     private boolean isAlive;
     private ArrayList<Item> items = new ArrayList<Item>();
     private Weapon gun;
+    private boolean hasWeapon;
     private Room currentRoom;
     
     public Player(int health, int max_health, int max_inventory, Room currentRoom) {
     	super(health);
         this.isAlive = true;
+        this.setHasWeapon(false);
         this.max_health = max_health;
         this.max_inventory = max_inventory;
         this.currentRoom = currentRoom;
@@ -61,6 +63,7 @@ public class Player extends Character{
     
     public void setGun(Weapon gun) {
     	this.gun = gun;
+    	this.setHasWeapon(true);
     }
     
     public void isAttacked() {
@@ -87,5 +90,13 @@ public class Player extends Character{
 
 	public void setCurrentRoom(Room currentRoom) {
 		this.currentRoom = currentRoom;
+	}
+
+	public boolean hasWeapon() {
+		return hasWeapon;
+	}
+	
+	public void setHasWeapon(boolean hasWeapon) {
+		this.hasWeapon = hasWeapon;
 	}
 }

@@ -4,26 +4,17 @@
  * Subclass of "Item" that interacts with the "states" attribute of the "Room" class
  */
 
-public class Weapon {
+public class Weapon extends Item{
 
-	private String name;
 	private int damage;
 	private int ammo;
 	public int max_ammo;
 	
-	public Weapon(String name, int damage, int ammo, int max_ammo) {
-		this.name = name;
+	public Weapon(String name, String description, int number, int inventory_space, int damage, int ammo, int max_ammo) {
+		super(name, description, number, inventory_space);
 		this.damage = damage;
 		this.ammo = ammo;
 		this.max_ammo = max_ammo;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public int getDamage() {
