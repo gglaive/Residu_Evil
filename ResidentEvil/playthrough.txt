@@ -1,0 +1,26 @@
+go north
+pickup spray
+go west
+go north
+go up
+go east
+pickup medal
+back
+back
+back
+back
+use spray
+go east
+go east
+go up
+go east
+go down
+pickup medal
+back
+back
+back
+back
+back
+use medal
+use medal
+go down
