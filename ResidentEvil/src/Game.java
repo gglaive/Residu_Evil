@@ -1,3 +1,6 @@
+import pkg_engine.GameEngine;
+import pkg_engine.UserInterface;
+
 /**
  * @author Geoffrey Glaive
  * @version 03.2019
